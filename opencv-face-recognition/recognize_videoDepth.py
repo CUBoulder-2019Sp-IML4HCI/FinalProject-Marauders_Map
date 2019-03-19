@@ -5,6 +5,8 @@
 #	--le output/le.pickle
 
 # import the necessary packages
+
+
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
@@ -15,6 +17,9 @@ import time
 import cv2
 import os
 
+
+from pythonosc import udp_client
+client = udp_client.SimpleUDPClient("localhost", 8999)
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--detector", required=True,
@@ -116,12 +121,14 @@ while True:
 				(0, 0, 255), 2)
 			cv2.putText(frame, text, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-
+            
+            
+			client.send_message("/faces", [name,int(startX),int(startY),int(endX),int(endY)] )
 	# update the FPS counter
 	fps.update()
 
 	# show the output frame
-	print(startX-endX+200)
+	#print(startX-endX+200)
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
