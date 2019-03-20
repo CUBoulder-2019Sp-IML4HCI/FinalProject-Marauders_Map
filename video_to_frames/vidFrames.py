@@ -11,14 +11,14 @@ Created on Mon Mar 18 22:19:06 2019
 
 import cv2
 
-personName = "Eric"
-path = "E:\Class Work\HCI\Final Project\FinalProject-Marauders_Map\opencv-face-recognition\dataset\\"
-vidcap = cv2.VideoCapture('Eric.mp4')
+personName = "Ashwin"
+path = "../opencv-face-recognition/dataset/"
+vidcap = cv2.VideoCapture('Ashwin.MOV')
 success,image = vidcap.read()
 count = 0
 while success:
     
-    img2 = cv2.rotate(image,cv2.ROTATE_90_COUNTERCLOCKWISE);
+    img2 = cv2.rotate(image,cv2.ROTATE_90_CLOCKWISE)
   
     cv2.imwrite("%s%s/frame%d.jpg" % (path,personName,count), img2)     # save frame as JPEG file      
     success,image = vidcap.read()
