@@ -17,7 +17,7 @@ import time
 import cv2
 import os
 
-
+scale = 3/5
 from pythonosc import udp_client
 client = udp_client.SimpleUDPClient("localhost", 8999)
 # construct the argument parser and parse the arguments
@@ -120,7 +120,7 @@ while True:
 			# draw the bounding box of the face along with the
 			# associated probability
 			faceWidth = abs(startX-endX);        
-			depth = 4*faceSizes[name]/faceWidth
+			depth = scale*4*faceSizes[name]/faceWidth
 			#depth=1;
 			text = "{}: {:.2f}% depth:{:.2f}".format(name, proba * 100,depth)
 			y = startY - 10 if startY - 10 > 10 else startY + 10
