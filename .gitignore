@@ -1,1 +1,6 @@
+.vscode
 *.h5
+.DS_Store
+*.MOV
+*.mp4
+
