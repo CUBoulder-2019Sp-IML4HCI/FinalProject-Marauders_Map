@@ -49,6 +49,10 @@ embedder = cv2.dnn.readNetFromTorch(args["embedding_model"])
 recognizer = pickle.loads(open(args["recognizer"], "rb").read())
 le = pickle.loads(open(args["le"], "rb").read())
 
+with open('faceSizes.pickle', 'rb') as handle:
+    faceSizes = pickle.load(handle)
+
+
 # initialize the video stream, then allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
@@ -112,10 +116,13 @@ while True:
 			j = np.argmax(preds)
 			proba = preds[j]
 			name = le.classes_[j]
-
+			print(name)       
 			# draw the bounding box of the face along with the
 			# associated probability
-			text = "{}: {:.2f}%".format(name, proba * 100)
+			faceWidth = abs(startX-endX);        
+			depth = 4*faceSizes[name]/faceWidth
+			#depth=1;
+			text = "{}: {:.2f}% depth:{:.2f}".format(name, proba * 100,depth)
 			y = startY - 10 if startY - 10 > 10 else startY + 10
 			cv2.rectangle(frame, (startX, startY), (endX, endY),
 				(0, 0, 255), 2)
@@ -128,7 +135,7 @@ while True:
 	fps.update()
 
 	# show the output frame
-	#print(startX-endX+200)
+	print(startX-endX)
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
