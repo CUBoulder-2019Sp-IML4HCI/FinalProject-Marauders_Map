@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
     
     - Results :[pictures](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/tree/master/prototype)
 - Youtube :
-  * [Demo](link)
+  * [Demo](https://youtu.be/TrNAKGQKF4Q)
   * [How to Run](https://youtu.be/pv_LqElPHjc)
 
     
