@@ -12,7 +12,10 @@
 
 ## Prototype(release v0.0.1):
 - Face recognition, face boundary detection and relative depth sensing 
-- Results :[pictures](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/tree/master/prototype)
+- Results :!
+- ![Face Recognition via WebCam](prototype/results.png)
+- ![Initial animation for webapp](prototype/feet.gif)
+- ![Depth sensor via Kinect](prototype/depth_kinect.png)
 - Youtube :
   * [Demo](link)
   * [How to Run](https://youtu.be/pv_LqElPHjc)
