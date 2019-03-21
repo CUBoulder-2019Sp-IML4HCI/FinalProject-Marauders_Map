@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
     * Connected kinect and visualizing depth map
     * experimented with model types
     * Testing and video creation
-- Project manager [@talia]
+- Project manager [@talia](link)
     * Found bug related to use on Windows machines
     * Tested installation process on fresh macOS environments
     
