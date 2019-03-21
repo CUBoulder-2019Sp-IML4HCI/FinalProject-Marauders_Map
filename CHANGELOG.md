@@ -20,11 +20,11 @@ All notable changes to this project will be documented in this file.
     * experimented with model types
     * Testing and video creation
 - Project manager [@talia](link)
-    * Found bug related to use on Windows machines
+    * Found and troubleshot bug related to use on Windows machines
     * Tested installation process on fresh macOS environments
-    
-    
-    - Results :[pictures](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/tree/master/prototype)
+    * Supervised other team members
+
+- Results :[pictures](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/tree/master/prototype)
 - Youtube :
   * [Demo](https://youtu.be/TrNAKGQKF4Q)
   * [How to Run](https://youtu.be/pv_LqElPHjc)
