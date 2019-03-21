@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.0] - 2019-03-20
 ### Added
-- Added face recognization and  face boundary detection [@nelson]
+- Added face recognization and  face boundary detection [@nelson](https://github.com/nelsonnn)
     * Using transfer learning and triplet loss on the embeddings to classify faces with few examples
     * Experimented other features and other models for the same, and using HOG features, speeds up real-time 
 - Added video to training picture script [@eric](https://github.com/em370)
