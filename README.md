@@ -12,10 +12,10 @@
 
 ## Prototype(release v0.0.1):
 - Face recognition, face boundary detection and relative depth sensing 
-- Results :!
-- ![Face Recognition via WebCam](prototype/results.png)
-- ![Initial animation for webapp](prototype/feet.gif)
-- ![Depth sensor via Kinect](prototype/depth_kinect.png)
+- Results :
+![Face Recognition via WebCam](prototype/results.png)
+![Initial animation for webapp](prototype/feet.gif)
+![Depth sensor via Kinect](prototype/depth_kinect.jpeg)
 - Youtube :
   * [Demo](link)
   * [How to Run](https://youtu.be/pv_LqElPHjc)
