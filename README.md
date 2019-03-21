@@ -19,7 +19,7 @@
 - Initial animation for webapp:         
 ![Initial animation for webapp](prototype/feet.gif)
 - Youtube Demos:
-  * [Demo](link)
+  * [Demo](https://youtu.be/2dC2-ibM4aw)
   * [How to Run](https://youtu.be/pv_LqElPHjc)
 
 
