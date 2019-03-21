@@ -14,9 +14,9 @@
 - Face recognition, face boundary detection and relative depth sensing 
 - Face Recognition via WebCam:
 ![Face Recognition via WebCam](prototype/results.png)
-- Depth sensor via Kinect
+- Depth sensor via Kinect:
 ![Depth sensor via Kinect](prototype/depth_kinect.jpeg)
-- Initial animation for webapp
+- Initial animation for webapp:         
 ![Initial animation for webapp](prototype/feet.gif)
 - Youtube Demos:
   * [Demo](link)
