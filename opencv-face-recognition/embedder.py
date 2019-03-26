@@ -5,9 +5,10 @@ python extract_embeddings.py --dataset dataset \
 	--detector face_detection_model \
 	--embedding-model face_detection_model/openface_nn4.small2.v1.t7
 '''	
-from imutils import path
+from imutils import paths
 import numpy as np
 # import argparse
+import imutils
 import cv2
 import os
 import pickle
@@ -15,23 +16,31 @@ import pickle
 
 class Embedder(object):
     def __init__(self,_dataset="dataset",_embeddings="output/embeddings.pickle", \
-                _detector="face_detector_model",_embedding_model="face_detection_model/openface_nn4.small2.v1.t7"):
+                _detector="face_detection_model",_embedding_model="face_detection_model/openface_nn4.small2.v1.t7", \
+                    _confidence = 0.4):
+        '''
+        @param : _dataset : path to input directory of faces + images
+        @param : _embeddings : path to output serialized db of facial embeddings
+        @param : _detector : path to OpenCV's deep learning face detector
+        @param : _embedding_model : path to OpenCV's deep learning face embedding model
+        '''
         self.dataset = _dataset
         self.embeddings = _embeddings
         self.detector_path =_detector
         self.embeddings_model = _embedding_model
-        self.detector = self.load_serialized_model()
-        self.embedder = self.load_face_recognizer()
+        self.confidence = _confidence
+        self.detector = self._load_serialized_model()
+        self.embedder = self._load_face_recognizer()
 
-    def load_serialized_model(self):
+    def _load_serialized_model(self):
         # load our serialized face detector from disk
         print("[INFO] loading face recognizer...")
-        protoPath = os.path.sep.join(self.detector_path, "deploy.prototxt"])
-        modelPath = os.path.sep.join(self.detector_path,
-	                "res10_300x300_ssd_iter_140000.caffemodel"])
+        protoPath = os.path.sep.join([self.detector_path, "deploy.prototxt"])
+        modelPath = os.path.sep.join([self.detector_path,"res10_300x300_ssd_iter_140000.caffemodel"])
+        print(protoPath,modelPath)
         return cv2.dnn.readNetFromCaffe(protoPath,modelPath)
 
-    def load_face_recognizer(self):
+    def _load_face_recognizer(self):
         # load our serialized face embedding model from disk
         print("[INFO] loading face recognizer...")
         return cv2.dnn.readNetFromTorch(self.embeddings_model)
@@ -43,11 +52,11 @@ class Embedder(object):
 
         # initialize our lists of extracted facial embeddings and
         # corresponding people names
-        knownEmbeddings = []
-        knownNames = []
+        self.knownEmbeddings = []
+        self.knownNames = []
 
         # initialize the total number of faces processed
-        total = 0
+        self.total = 0
 
         # loop over the image paths
         for (i, imagePath) in enumerate(imagePaths):
@@ -83,7 +92,7 @@ class Embedder(object):
                 # ensure that the detection with the largest probability also
                 # means our minimum probability test (thus helping filter out
                 # weak detections)
-                if confidence > args["confidence"]:
+                if confidence > self.confidence:
                     # compute the (x, y)-coordinates of the bounding box for
                     # the face
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -107,14 +116,18 @@ class Embedder(object):
 
                     # add the name of the person + corresponding face
                     # embedding to their respective lists
-                    knownNames.append(name)
-                    knownEmbeddings.append(vec.flatten())
-                    total += 1
+                    self.knownNames.append(name)
+                    self.knownEmbeddings.append(vec.flatten())
+                    self.total += 1
                 
-    def serialize_encodings(self,knownEmbeddings,knownNames):
-        print("[INFO] serializing {} encodings...".format(total))
-        data = {"embeddings": knownEmbeddings, "names": knownNames}
+    def serialize_encodings(self):
+        print("[INFO] serializing {} encodings...".format(self.total))
+        data = {"embeddings": self.knownEmbeddings, "names": self.knownNames}
         f = open(self.embeddings, "wb")
         f.write(pickle.dumps(data))
         f.close()
+
+e = Embedder()
+e.detect_faces_save()
+e.serialize_encodings()
 
