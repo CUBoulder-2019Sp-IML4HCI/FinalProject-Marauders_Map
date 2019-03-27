@@ -37,7 +37,6 @@ class Embedder(object):
         print("[INFO] loading face recognizer...")
         protoPath = os.path.sep.join([self.detector_path, "deploy.prototxt"])
         modelPath = os.path.sep.join([self.detector_path,"res10_300x300_ssd_iter_140000.caffemodel"])
-        print(protoPath,modelPath)
         return cv2.dnn.readNetFromCaffe(protoPath,modelPath)
 
     def _load_face_recognizer(self):

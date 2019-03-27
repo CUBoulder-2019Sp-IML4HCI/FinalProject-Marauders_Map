@@ -116,7 +116,7 @@ while True:
 			j = np.argmax(preds)
 			proba = preds[j]
 			name = le.classes_[j]
-			print(name)       
+			# print(name)       
 			# draw the bounding box of the face along with the
 			# associated probability
 			faceWidth = abs(startX-endX);        
@@ -135,7 +135,7 @@ while True:
 	fps.update()
 
 	# show the output frame
-	print(startX-endX)
+	# print(startX-endX)
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
