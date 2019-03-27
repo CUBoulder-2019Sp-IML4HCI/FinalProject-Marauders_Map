@@ -45,5 +45,5 @@ class ModelTrainer():
         f.write(pickle.dumps(self.le))
         f.close()
 
-t = ModelTrainer()
-t.train_and_save()
+# t = ModelTrainer()
+# t.train_and_save()

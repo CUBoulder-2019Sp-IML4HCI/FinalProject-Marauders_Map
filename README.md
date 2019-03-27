@@ -22,4 +22,11 @@
   * [Demo](https://youtu.be/TrNAKGQKF4Q)
   * [How to Run](https://youtu.be/pv_LqElPHjc)
 
+#### TODO:
+* Refactor into classes
+* Visualize a 2d pygame environment (using relative depth)
+* Connect with Kinect
+* Play with kinect get-depth
+* Create an app that allows to add images directly from phone.
+* Experimentation with height and angle
 

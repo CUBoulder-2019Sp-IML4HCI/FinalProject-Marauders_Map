@@ -114,7 +114,7 @@ class Streamer():
                     faceWidth = abs(startX-endX);        
                     depth = self.scale*4*self.faceSizes[name]/faceWidth
                     #depth=1;
-                    text = "{}: {:.2f}% d:{:.2f}".format(name, proba * 100,depth)
+                    text = "{}: {:.2f}% d:{:.1f}".format(name, proba * 100,depth)
                     y = startY - 10 if startY - 10 > 10 else startY + 10
                     cv2.rectangle(frame, (startX, startY), (endX, endY),
                         (0, 0, 255), 2)
@@ -142,5 +142,5 @@ class Streamer():
         cv2.destroyAllWindows()
         vs.stop()
 
-s = Streamer()
-s.main_loop()
+# s = Streamer()
+# s.main_loop()

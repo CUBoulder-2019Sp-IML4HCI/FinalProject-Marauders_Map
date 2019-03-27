@@ -126,7 +126,7 @@ class Embedder(object):
         f.write(pickle.dumps(data))
         f.close()
 
-e = Embedder()
-e.detect_faces_save()
-e.serialize_encodings()
+# e = Embedder()
+# e.detect_faces_save()
+# e.serialize_encodings()
 
