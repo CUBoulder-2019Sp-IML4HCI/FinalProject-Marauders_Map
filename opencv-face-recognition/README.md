@@ -1,3 +1,18 @@
+## After Refactor:
+
+1) To run the face_recognizer with the depth feature that sends OSC messages :
+```
+python just_run.py
+```
+_note : `python just_run.py -t -e` to train and regenerate the embeddings_
+
+2) To run the listner:
+```
+python listener.py
+```
+
+## Before Refactor: 
+
 Workflow:
 
 run regenerateAndRun.py to create the model and test it

@@ -86,7 +86,8 @@ class Streamer():
                     # the face
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                     (startX, startY, endX, endY) = box.astype("int")
-
+                    midX = (startX + endX) // 2
+                    midY = (startY + endY) // 2
                     # extract the face ROI
                     face = frame[startY:endY, startX:endX]
                     (fH, fW) = face.shape[:2]
@@ -122,7 +123,7 @@ class Streamer():
                         cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
                     
                     
-                    self.client.send_message("/faces", [name,int(startX),int(startY),int(endX),int(endY)] )
+                    self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
             # update the FPS counter
             fps.update()
 
