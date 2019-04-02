@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
     * experimented with model types
     * Testing and video creation
 - Project manager [@talia](link)
+    * 3d modeling and printing a rotatable stand for the kinect
     * Found and troubleshot bug related to use on Windows machines
     * Tested installation process on fresh macOS environments
     * Supervised other team members
