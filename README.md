@@ -23,10 +23,11 @@
   * [How to Run](https://youtu.be/pv_LqElPHjc)
 
 #### TODO:
-* Refactor into classes
-* Visualize a 2d pygame environment (using relative depth)
-* Connect with Kinect
+* Refactor into classes : Done. Only optimization might be to use the same object instead of loading experiment
+* Visualize a 2d pygame environment (using relative depth) : Done 
+* Connect with Kinect :In progress
 * Play with kinect get-depth
-* Create an app that allows to add images directly from phone.
+* Create an app that allows to add images directly from app : In progress
+* Adding server code in java script and working on frontend : In progress
 * Experimentation with height and angle
 
