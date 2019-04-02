@@ -1,0 +1,30 @@
+
+.ui.header.blue
+{
+        margin-top: 0em;
+	margin-bottom: 1em;
+        font-size: 2.5em;
+        font-family: 'Happy Monkey', cursive;
+}
+.ui.header.green
+{
+        margin-top: 0em;
+        font-size: 4em;
+        font-family: 'Happy Monkey', cursive;
+}
+.ui.label
+{
+	margin-right: 2em;
+	margin-top: 1em;
+	font-size: 2em;
+	font-family: 'Happy Monkey', cursive;
+}
+.ui.input 
+{
+	height: 2em;
+	width: 10em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	font-size: 2em;
+	font-family: 'Happy Monkey', cursive;
+}

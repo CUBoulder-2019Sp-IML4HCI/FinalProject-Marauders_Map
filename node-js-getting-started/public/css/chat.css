@@ -1,0 +1,44 @@
+.ui.message
+{
+    position: absolute; 
+    bottom: 0;
+}
+
+.pusher
+{
+	height: 99vh;
+}
+body
+{
+	color: red;
+}
+.chatbox
+{
+	background-color:#f8f8ff;
+	position: absolute;
+	height: calc(100vh - 4em);
+	width: 81%;
+	overflow: auto;
+}
+
+.ui.fluid.action.input
+{
+	position: absolute;
+	bottom: 0;
+	width:81vw;
+	height: 2.5em;
+}
+
+.chatbox p:nth-child(odd)
+{
+	background-color: #eee;
+}
+.centered
+{
+	text-align: center;
+}
+
+.ui.center.aligned.segment.transparent
+{
+	background-color: transparent;
+}

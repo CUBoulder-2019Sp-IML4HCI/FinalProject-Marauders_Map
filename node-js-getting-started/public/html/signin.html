@@ -1,0 +1,38 @@
+<! DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset = "UTF-8" />
+		<link rel="shortcut icon" href="../assets/breezylogo.ico" type="image/x-icon"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Happy+Monkey' rel='stylesheet' type='text/css'>
+		<script src="semantic/dist/semantic.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/signin.css"/>
+		<title>BreezyTalk</title>
+	</head>
+
+	<body>
+		<div class="ui center aligned segment">
+		<h1 class="ui blue header">
+			Welcome Back!
+		</h1>
+		<p>
+			<label class="ui label"> Email </label>
+			<input class ="ui input" type ="text"
+				   id = "myEmail"
+				   placeholder ="What's your email?" />
+		</p>
+		<p>
+			<label class="ui label"> Password </label>
+			<input class="ui input" type ="password"
+				   id = "myPwd"
+				   value ="secret" />
+		</p>
+		<button class="ui huge green button" id="signin-button"> Log In </button>
+		<script src="/js/signin-bundle.js"></script>
+		<a href ="forgotten" class="ui huge green button"> Forgot Password? </a>
+		<a href ="signup" class="ui huge green button"> Signup! </a>
+		</div>
+	</body>
+
+</html>

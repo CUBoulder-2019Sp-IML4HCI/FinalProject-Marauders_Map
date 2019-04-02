@@ -1,0 +1,119 @@
+<! DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset = "UTF-8" />
+		<link rel="shortcut icon" href="../assets/breezylogo.ico" type="image/x-icon"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Happy+Monkey' rel='stylesheet' type='text/css'>
+		<script src="semantic/dist/semantic.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/signup.css"/>
+		<title>BreezyTalk</title>
+	</head>
+	
+	<body>
+		<div class="ui center aligned segment">
+			<h1 class="ui blue header">
+				Let's Get Started
+			</h1>
+			<p>
+				<label class="ui label"> Email Address </label>
+				<input class ="ui input"
+					   id = "myEmail"
+				       placeholder="Enter Your Email" />
+			</p>
+			<p>
+				<label class="ui label"> Username </label>
+				<input class ="ui input"type ="text"
+					   id = "myName"
+				       placeholder="Pick A Name!" />
+			</p>
+			<p>
+				<label class="ui label"> Password </label>
+				<input class ="ui input"type ="password"
+					   id = "myPwd"
+					   data-value ="secret" />
+			</p>
+			<p>
+				<label class="ui label"> Confirm Password </label>
+				<input class ="ui input"type ="password"
+					   id = "myConfirm"
+					   data-value ="secret" />
+			</p>
+		<div class="ui selection dropdown" id="langselect">
+			<input type="hidden" name="user">
+				<i class="dropdown icon"></i>
+					<div class="default text">Select Language</div>
+						<div class="menu" >
+							<div class="item" data-value="sq">Albanian</div>
+							<div class="item" data-value="en">English</div>
+							<div class="item" data-value="ar">Arabic</div>
+							<div class="item" data-value="hy">Armenian</div>
+							<div class="item" data-value="az">Azerbaijan</div>
+							<div class="item" data-value="af">Afrikaans</div>
+							<div class="item" data-value="eu">Basque</div>
+							<div class="item" data-value="be">Belarusian</div>
+							<div class="item" data-value="bg">Bulgarian</div>
+							<div class="item" data-value="bs">Bosnian</div>
+							<div class="item" data-value="cy">Welsh</div>
+							<div class="item" data-value="vi">Vietnamese</div>
+							<div class="item" data-value="hu">Hungarian</div>
+							<div class="item" data-value="ht">Haitian (Creole)</div>
+							<div class="item" data-value="gl">Galician</div>
+							<div class="item" data-value="nl">Dutch</div>
+							<div class="item" data-value="el">Greek</div>
+							<div class="item" data-value="ka">Georgian</div>
+							<div class="item" data-value="da">Danish</div>
+							<div class="item" data-value="he">Yiddish</div>
+							<div class="item" data-value="id">Indonesian</div>
+							<div class="item" data-value="ga">Irish</div>
+							<div class="item" data-value="it">Italian</div>
+							<div class="item" data-value="is">Icelandic</div>
+							<div class="item" data-value="es">Spanish</div>
+							<div class="item" data-value="kk">Kazakh</div>
+							<div class="item" data-value="ca">Catalan</div>
+							<div class="item" data-value="ky">Kyrgyz</div>
+							<div class="item" data-value="zh">Chinese</div>
+							<div class="item" data-value="ko">Korean</div>
+							<div class="item" data-value="la">Latin</div>
+							<div class="item" data-value="lv">Latvian</div>
+							<div class="item" data-value="lt">Lithuanian</div>
+							<div class="item" data-value="mg">Malagasy</div>
+							<div class="item" data-value="ms">Malay</div>
+							<div class="item" data-value="mt">Maltese</div>
+							<div class="item" data-value="mk">Macedonian</div>
+							<div class="item" data-value="mn">Mongolian</div>
+							<div class="item" data-value="de">German</div>
+							<div class="item" data-value="no">Norwegian</div>
+							<div class="item" data-value="fa">Persian</div>
+							<div class="item" data-value="pl">Polish</div>
+							<div class="item" data-value="pt">Portuguese</div>
+							<div class="item" data-value="ro">Romanian</div>
+							<div class="item" data-value="ru">Russian</div>
+							<div class="item" data-value="sr">Serbian</div>
+							<div class="item" data-value="sk">Slovakian</div>
+							<div class="item" data-value="sl">Slovenian</div>
+							<div class="item" data-value="sw">Swahili</div>
+							<div class="item" data-value="tg">Tajik</div>
+							<div class="item" data-value="th">Thai</div>
+							<div class="item" data-value="tl">Tagalog</div>
+							<div class="item" data-value="tt">Tatar</div>
+							<div class="item" data-value="tr">Turkish</div>
+							<div class="item" data-value="uz">Uzbek</div>
+							<div class="item" data-value="uk">Ukrainian</div>
+							<div class="item" data-value="fi">Finish</div>
+							<div class="item" data-value="fr">French</div>
+							<div class="item" data-value="hr">Croatian</div>
+							<div class="item" data-value="cs">Czech</div>
+							<div class="item" data-value="sv">Swedish</div>
+							<div class="item" data-value="et">Estonian</div>
+							<div class="item" data-value="ja">Japanese</div>
+
+						</div>
+		</div>
+			<button class="ui huge green button" id="signup-button"> Submit </button>
+		        <script src="/js/signup-bundle.js"></script>
+		</div>		   
+	</body>
+	
+</html>

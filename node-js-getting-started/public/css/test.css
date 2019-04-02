@@ -1,0 +1,12 @@
+.segment
+{
+	height: 90vh;
+
+}
+
+.ui.blue.header
+{
+	margin-top: 2em;
+	font-size: 4em;
+	font-family: 'Happy Monkey', cursive;
+}

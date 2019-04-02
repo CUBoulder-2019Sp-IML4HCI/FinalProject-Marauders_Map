@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/chat.css"/>
+		<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="js/chatbundle.js"></script>
+		<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+		<script src="semantic/dist/semantic.min.js"></script>
+		<title>BreezyTalk</title>
+	</head>
+	<body>
+		<div id="friendadder" class="ui basic modal">
+			<i class="close icon"></i>
+			<div class="header">
+				<p class="centered">Add to which group?<p>
+			</div>
+			<div id="addbuttons" class="ui center aligned segment transparent">
+			<!--<button class="ui button"> Group 1 </button>
+			<button class="ui button"> Group 2 </button>-->
+			</div>
+		</div>
+		<div id="roomadder" class="ui basic modal">
+			<i class="close icon"></i>
+			<div class="header">
+				<p id="roominfo" class="centered">Do you want to join?<p>
+			</div>
+			<div id="decisions" class="ui center aligned segment transparent">
+			<button class="ui button" id="yes"> YES </button>
+			<button class="ui button" id="no"> No </button>
+			</div>
+		</div>
+		<div id="groupjoiner" class="ui basic modal">
+			<i class="close icon"></i>
+			<div class="header">
+				<p>Enter Room Name<p>
+			</div>
+			<div class="ui fluid action input">
+				<div class="ui button" id="groupcancel">Cancel</div>
+
+				<input type="text" id="groupinput" placeholder="">
+				<div class="ui button" id="groupbutton">Join</div>
+			</div>
+        </div>
+		<div class="ui bottom attached segment pushable">
+			<div class="ui visible inverted left vertical sidebar menu">
+				<a class="ui inverted item tabl randomer" data-tab="random" id="random">
+				<i class="green leaf icon"></i>
+				Find Random Friend
+				</a>
+				<a class="item" id="addfriend">
+				<i class="blue users icon"></i>
+				Add Current Friend to Group 
+				</a>
+				<a class="ui inverted item "  id="groupjoin">
+				<i class="yellow search icon"></i>
+				Join Group
+				</a>
+				<a class="ui inverted item tabl randomer" id="tfriend" data-tab="random">
+				<i class="red arrow circle left icon"></i>
+				Return to Random Chat
+				</a>
+
+				<a class="ui inverted item "  id="Logout">
+				<i class="purple sign out icon"></i>
+				Logout
+                                </a>
+                                
+                                <div class="ui inverted accordion" id="accordion-parent">
+                                        <div class="inverted title"> 
+						<i class="dropdown icon"></i>
+						Your Groups
+					</div>
+					<div class="inverted content" id="grouplist">
+					</div>
+				</div>
+                                
+                                <div class="ui message" id="closable-message">
+                                    <i class="close icon"></i>
+                                    <div class="header">
+                                    Welcome!
+                                    </div>
+                                    <p>Here you can chat with random people from all over the world. Speak freely, because regardless of whether you find a new friend or link up with your favorite group, you'll find no language barriers here. Enjoy shooting the breeze! </p>
+                                    </div> 
+			        </div>
+
+			<div class="pusher" id="lower">
+				<div class="chatbox ui tab segment" data-tab="zero" id="ran">
+				</div>
+				<!--<div class="chatbox ui tab segment" data-tab="random" id="ran">
+				</div>-->
+				<div class="ui fluid action input">
+					<input id="messfield" type="text" placeholder="Say Something">
+					<div class="ui button" id="sender">Send</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

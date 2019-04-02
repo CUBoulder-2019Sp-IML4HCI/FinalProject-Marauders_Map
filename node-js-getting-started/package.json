@@ -1,0 +1,41 @@
+{
+  "name": "breezy",
+  "version": "1.0.0",
+  "description": "breeezytalk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/em370/breezy.git"
+  },
+  "keywords": [
+    "chat"
+  ],
+  "author": "Eric Minor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/em370/breezy/issues"
+  },
+  "homepage": "https://github.com/em370/breezy#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "express-stormpath": "^3.1.2",
+    "express-useragent": "^0.2.4",
+    "firebase": "^2.4.2",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-stormpath": "^0.2.4",
+    "require": "^2.4.20",
+    "socket.io": "^1.4.5",
+    "static-favicon": "^2.0.0-alpha",
+    "stormpath": "^0.18.2",
+    "stylus": "^0.54.2",
+    "user-agent": "^1.0.4"
+  }
+}
