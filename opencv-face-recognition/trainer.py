@@ -22,18 +22,18 @@ class ModelTrainer():
     def _load_face_embeddings(self):
         # load the face embeddings
         return pickle.loads(open(self._emb_path, "rb").read())
-    
+
     def encode_labels(self):
         # encode the labels
         print("[INFO] encoding labels...")
         self.le = LabelEncoder()
         labels = self.le.fit_transform(self.data["names"])
         return labels
-    
+
     def train_and_save(self):
         #todo : play with gaussian kernel and alpha
         print("[INFO] training model...")
-        recognizer = SVC(C=0.5, kernel="linear", probability=True)
+        recognizer = SVC(C=1.0, kernel="linear", probability=True)
         recognizer.fit(self.data["embeddings"], self.labels)
         # write the actual face recognition model to disk
         f = open(self._recognizer_path, "wb")
