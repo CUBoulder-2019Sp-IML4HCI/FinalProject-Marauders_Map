@@ -12,6 +12,8 @@ import time
 import cv2
 import os
 from pythonosc import udp_client
+from websocket import create_connection
+import json
 
 
 class Streamer():
@@ -23,7 +25,9 @@ class Streamer():
             self._emb_model = _emb_model
             self.confidence =_confidence
             self.scale = 3/5
-            self.client = udp_client.SimpleUDPClient("localhost", 8999)
+            self.client = udp_client.SimpleUDPClient("localhost", 3000)
+            self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
+			
             self.detector = self._load_serialized_model()
             self.embedder = self._load_face_recognizer()
             self.recognizer = pickle.loads(open(_recognizer, "rb").read())
@@ -124,6 +128,9 @@ class Streamer():
                     
                     
                     self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
+                    wsString = json.dumps([name,int(midX),int(depth*10)])
+                    self.ws.send(wsString)
+                    
             # update the FPS counter
             fps.update()
 
