@@ -1,6 +1,7 @@
 .vscode
 *.h5
-.DS_Store
+*.DS_Store
 *.MOV
 *.mp4
+*.pyc
 
