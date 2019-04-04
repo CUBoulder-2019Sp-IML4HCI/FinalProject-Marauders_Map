@@ -27,7 +27,7 @@ class Streamer():
             self.scale = 3/5
             self.client = udp_client.SimpleUDPClient("localhost", 3000)
             self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
-			
+            #self.ws= create_connection("ws://localhost:3000")
             self.detector = self._load_serialized_model()
             self.embedder = self._load_face_recognizer()
             self.recognizer = pickle.loads(open(_recognizer, "rb").read())
