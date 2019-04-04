@@ -36,3 +36,4 @@ All notable changes to this project will be documented in this file.
 - Refactored into classes[@ashwin](https://github.com/ashwinroot)
 - Kinect connected to live feed with depth[@ashwin](https://github.com/ashwinroot) and [@talia](https://github.com/ashwinroot)
 - Visualizing 2d map in pygame [@ashwin](https://github.com/ashwinroot)
+- Ported and setup processing visualizer on web-app[@supriya](https://github.com/supriyanaidu)
