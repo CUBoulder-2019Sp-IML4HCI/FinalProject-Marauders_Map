@@ -1,4 +1,4 @@
-from recognizer_kinect import Streamer as S_1
+#from recognizer_kinect import Streamer as S_1
 from recognizer import Streamer as S_2
 from embedder import Embedder
 from trainer import ModelTrainer
