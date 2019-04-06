@@ -31,6 +31,7 @@ class Streamer():
             with open('faceSizes.pickle', 'rb') as handle:
                 self.faceSizes = pickle.load(handle)
             self.tick = 0
+            self.vs =
     def add_face_size(self,name):
         self.faceSizes[name] = 155
         with open('faceSizes.pickle', 'wb') as handle:
