@@ -19,7 +19,7 @@ from embedder import Embedder
 from  trainer import ModelTrainer
 
 
-class Streamer():
+class Streamer(object):
     def __init__(self,_detector="face_detection_model",\
           _emb_model = "face_detection_model/openface_nn4.small2.v1.t7", \
             _recognizer = "output/recognizer.pickle",
@@ -157,7 +157,7 @@ class Streamer():
             if key == ord("q"):
                 break
             if key == ord("n"):
-                self.add_images()
+                self.add_images(self.get_frame)
         self.fps.stop()
         print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
         print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
@@ -211,7 +211,10 @@ class Streamer():
         for file in os.listdir("output"):
             os.remove(os.path.join("output", file))
 
-    def add_images(self):
+    def get_frame(self):
+        return self.vs.read()
+
+    def add_images(self,get_frame):
         name = input("What is your name? ")
         self._add_face_size(name)
         path = os.path.join("dataset", name)
@@ -220,7 +223,7 @@ class Streamer():
         os.mkdir(path)
         detections = 0
         while detections < 6:
-            frame = self.vs.read()
+            frame = get_frame()
             detections += self.extract_training_faces(frame, name)
             self.fps.update()
 

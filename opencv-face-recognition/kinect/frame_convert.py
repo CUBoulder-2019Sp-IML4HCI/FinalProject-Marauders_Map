@@ -43,4 +43,6 @@ def video_cv(video):
     Returns:
         A numpy array with with 1 byte per pixel, 3 channels BGR
     """
+    print("here")
+    print(video)
     return video[:, :, ::-1]  # RGB -> BGR

@@ -19,85 +19,29 @@ from freenect import sync_get_depth as get_depth
 import matplotlib
 matplotlib.use('PS')
 import matplotlib.pyplot as plt
+from  recognizer import Streamer
 
-def make_gamma():
-    """
-    Create a gamma table
-    """
-    num_pix = 2048 # there's 2048 different possible depth values
-    npf = float(num_pix)
-    _gamma = np.empty((num_pix, 3), dtype=np.uint16)
-    for i in range(num_pix):
-        v = i / npf
-        v = pow(v, 3) * 6
-        pval = int(v * 6 * 256)
-        lb = pval & 0xff
-        pval >>= 8
-        if pval == 0:
-            a = np.array([255, 255 - lb, 255 - lb], dtype=np.uint8)
-        elif pval == 1:
-            a = np.array([255, lb, 0], dtype=np.uint8)
-        elif pval == 2:
-            a = np.array([255 - lb, lb, 0], dtype=np.uint8)
-        elif pval == 3:
-            a = np.array([255 - lb, 255, 0], dtype=np.uint8)
-        elif pval == 4:
-            a = np.array([0, 255 - lb, 255], dtype=np.uint8)
-        elif pval == 5:
-            a = np.array([0, 0, 255 - lb], dtype=np.uint8)
-        else:
-            a = np.array([0, 0, 0], dtype=np.uint8)
-
-        _gamma[i] = a
-    return _gamma
-
-gamma  = make_gamma()
-
-class Streamer():
+class Streamer_kinect(Streamer):
     def __init__(self,isKinnect=False,_detector="face_detection_model",\
           _emb_model = "face_detection_model/openface_nn4.small2.v1.t7", \
             _recognizer = "output/recognizer.pickle",
             _le = "output/le.pickle",_confidence=0.5):
-            self._detector_path = _detector
-            self._emb_model = _emb_model
-            self.confidence =_confidence
-            self.scale = 3/5
-            self.client = udp_client.SimpleUDPClient("localhost", 3000)
-            self.detector = self._load_serialized_model()
-            self.embedder = self._load_face_recognizer()
-            self.recognizer = pickle.loads(open(_recognizer, "rb").read())
-            self.le = pickle.loads(open(_le, "rb").read())
-            with open('faceSizes.pickle', 'rb') as handle:
-                self.faceSizes = pickle.load(handle)
-            # self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
+            super().__init__(_detector,_emb_model,_recognizer,_le,_confidence)
 
-
-    def _load_serialized_model(self):
-        # load our serialized face detector from disk
-        print("[INFO] loading face detector...")
-        protoPath = os.path.sep.join([self._detector_path, "deploy.prototxt"])
-        modelPath = os.path.sep.join([self._detector_path,"res10_300x300_ssd_iter_140000.caffemodel"])
-        print(protoPath,modelPath)
-        return cv2.dnn.readNetFromCaffe(protoPath,modelPath)
-    
-    def _load_face_recognizer(self):
-        # load our serialized face embedding model from disk
-        print("[INFO] loading face recognizer...")
-        return cv2.dnn.readNetFromTorch(self._emb_model)
-
-    def main_loop(self):
+    def main_loop_kinnect(self):
         print("[INFO] starting video stream...")
         # vs = VideoStream(src=0).start()
         # time.sleep(2.0)
 
         # start the FPS throughput estimator
-        fps = FPS().start()
+        self.fps = FPS().start()
         cv2.namedWindow('Depth')
+        cv2.namedWindow('Frame')
         # loop over frames from the video file stream
         while True:
             # grab the frame from the threaded video stream
+            print("here")
             frame = test_depth.get_video()
-            # print("here")
             depth_frame = cv2.GaussianBlur(test_depth.get_depth(), (5, 5), 0)
             cv2.imshow('Depth', depth_frame)
             # print(np.array(depth_frame).shape)
@@ -178,7 +122,7 @@ class Streamer():
                     # self.ws.send(wsString)
 
             # update the FPS counter
-            fps.update()
+            self.fps.update()
 
             # show the output frame
             # print(startX-endX)
@@ -188,13 +132,16 @@ class Streamer():
             # if the `q` key was pressed, break from the loop
             if key == ord("q"):
                 break
-        fps.stop()
+            if key == ord("n"):
+                self.add_images(test_depth.get_video)
+
+        self.fps.stop()
         print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
         print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
         # do a bit of cleanup
         cv2.destroyAllWindows()
-        vs.stop()
+  
 
 # s = Streamer()
 # s.main_loop()
