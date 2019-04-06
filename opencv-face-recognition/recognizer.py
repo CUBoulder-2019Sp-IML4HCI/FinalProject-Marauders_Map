@@ -14,6 +14,9 @@ import os
 from pythonosc import udp_client
 from websocket import create_connection
 import json
+import shutil
+from embedder import Embedder
+from  trainer import ModelTrainer
 
 
 class Streamer():
@@ -29,13 +32,19 @@ class Streamer():
             self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
             #self.ws= create_connection("ws://localhost:3000")
             self.detector = self._load_serialized_model()
-            self.embedder = self._load_face_recognizer()
-            self.recognizer = pickle.loads(open(_recognizer, "rb").read())
-            self.le = pickle.loads(open(_le, "rb").read())
+            self.load_face_datas()
             with open('faceSizes.pickle', 'rb') as handle:
                 self.faceSizes = pickle.load(handle)
+            self.vs = None
+            self.fps = None
+            self.tick = 0
 
-
+    def load_face_datas(self,_recognizer = "output/recognizer.pickle",
+            _le = "output/le.pickle"):
+        self.embedder = self._load_face_recognizer()
+        self.recognizer = pickle.loads(open(_recognizer, "rb").read())
+        self.le = pickle.loads(open(_le, "rb").read())
+        
     def _load_serialized_model(self):
         # load our serialized face detector from disk
         print("[INFO] loading face detector...")
@@ -48,19 +57,24 @@ class Streamer():
         # load our serialized face embedding model from disk
         print("[INFO] loading face recognizer...")
         return cv2.dnn.readNetFromTorch(self._emb_model)
+    
+    def _add_face_size(self,name):
+        self.faceSizes[name] = 155
+        with open('faceSizes.pickle', 'wb') as handle:
+            pickle.dump(self.faceSizes, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     def main_loop(self):
         print("[INFO] starting video stream...")
-        vs = VideoStream(src=0).start()
+        self.vs = VideoStream(src=0).start()
         time.sleep(2.0)
 
         # start the FPS throughput estimator
-        fps = FPS().start()
+        self.fps = FPS().start()
 
         # loop over frames from the video file stream
         while True:
             # grab the frame from the threaded video stream
-            frame = vs.read()
+            frame = self.vs.read()
 
             # resize the frame to have a width of 600 pixels (while
             # maintaining the aspect ratio), and then grab the image
@@ -129,10 +143,10 @@ class Streamer():
                     
                     self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
                     wsString = json.dumps([name,int(midX),int(depth*10)])
-                    self.ws.send(wsString)
+                    self.ws.send(wsString) #sending to website
                     
             # update the FPS counter
-            fps.update()
+            self.fps.update()
 
             # show the output frame
             # print(startX-endX)
@@ -142,13 +156,89 @@ class Streamer():
             # if the `q` key was pressed, break from the loop
             if key == ord("q"):
                 break
-        fps.stop()
+            if key == ord("n"):
+                self.add_images()
+        self.fps.stop()
         print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
         print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
         # do a bit of cleanup
         cv2.destroyAllWindows()
-        vs.stop()
+        self.vs.stop()
 
-# s = Streamer()
-# s.main_loop()
+
+    def extract_training_faces(self, image, name):
+        frame = imutils.resize(image, width=600)
+        (h, w) = frame.shape[:2]
+        if time.time() - self.tick < 2:
+            if time.time() - self.tick < .5:
+                cv2.rectangle(frame, (0,0), (w, h),
+                    (0, 255, 0), 10)
+            cv2.imshow("Frame", frame)
+            return 0
+
+        cv2.imshow("Frame", frame)
+
+        # construct a blob from the image
+        imageBlob = cv2.dnn.blobFromImage(
+            cv2.resize(frame, (300, 300)), 1.0, (300, 300),
+            (104.0, 177.0, 123.0), swapRB=False, crop=False)
+
+        # apply OpenCV's deep learning-based face detector to localize
+        # faces in the input image
+        self.detector.setInput(imageBlob)
+        detections = self.detector.forward()
+
+        # ensure at least one face was found
+        if len(detections) > 0:
+            # we're making the assumption that each image has only ONE
+            # face, so find the bounding box with the largest probability
+            i = np.argmax(detections[0, 0, :, 2])
+            confidence = detections[0, 0, i, 2]
+
+            # ensure that the detection with the largest probability also
+            # means our minimum probability test (thus helping filter out
+            # weak detections)
+            if confidence > self.confidence:
+                path = os.path.join("dataset",name,f"{name}_{time.time()}.jpeg")
+                cv2.imwrite(path, image)
+                self.tick = time.time()
+        if time.time() - self.tick < 1:
+            return 1
+        return 0
+
+    def cleanup_output(self):
+        for file in os.listdir("output"):
+            os.remove(os.path.join("output", file))
+
+    def add_images(self):
+        name = input("What is your name? ")
+        self._add_face_size(name)
+        path = os.path.join("dataset", name)
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        os.mkdir(path)
+        detections = 0
+        while detections < 6:
+            frame = self.vs.read()
+            detections += self.extract_training_faces(frame, name)
+            self.fps.update()
+
+            key = cv2.waitKey(1) & 0xFF
+
+            if key == ord("q"):
+                return
+
+        self.cleanup_output()
+
+        e = Embedder()
+        e.detect_faces_save()
+        e.serialize_encodings()
+
+        t = ModelTrainer()
+        t.train_and_save()
+        
+        self.load_face_datas()
+        # cv2.destroyWindow("Frame")
+        
+        return 
