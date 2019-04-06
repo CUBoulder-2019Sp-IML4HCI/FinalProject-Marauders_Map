@@ -36,4 +36,9 @@ All notable changes to this project will be documented in this file.
 - Refactored into classes[@ashwin](https://github.com/ashwinroot)
 - Kinect connected to live feed with depth[@ashwin](https://github.com/ashwinroot) and [@talia](https://github.com/ashwinroot)
 - Visualizing 2d map in pygame [@ashwin](https://github.com/ashwinroot)
+- Made heroku website and added websocket code to the recognizer. just_runC.py runs without kinect code [@eric](https://github.com/em370)
 - Ported and setup processing visualizer on web-app[@supriya](https://github.com/supriyanaidu)
+- fixed the web app and visualizer [@eric](https://github.com/em370)
+
+
+
