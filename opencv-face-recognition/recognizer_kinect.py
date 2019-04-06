@@ -12,6 +12,8 @@ import time
 import cv2
 import os
 from pythonosc import udp_client
+from websocket import create_connection
+import json
 from kinect import test_depth
 from freenect import sync_get_depth as get_depth
 import matplotlib
@@ -60,13 +62,14 @@ class Streamer():
             self._emb_model = _emb_model
             self.confidence =_confidence
             self.scale = 3/5
-            self.client = udp_client.SimpleUDPClient("localhost", 8999)
+            self.client = udp_client.SimpleUDPClient("localhost", 3000)
             self.detector = self._load_serialized_model()
             self.embedder = self._load_face_recognizer()
             self.recognizer = pickle.loads(open(_recognizer, "rb").read())
             self.le = pickle.loads(open(_le, "rb").read())
             with open('faceSizes.pickle', 'rb') as handle:
                 self.faceSizes = pickle.load(handle)
+            # self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
 
 
     def _load_serialized_model(self):
@@ -171,6 +174,9 @@ class Streamer():
                     
                     
                     self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
+                    # wsString = json.dumps([name,int(midX),int(depth*10)])
+                    # self.ws.send(wsString)
+
             # update the FPS counter
             fps.update()
 
