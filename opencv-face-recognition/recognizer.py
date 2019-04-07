@@ -28,9 +28,9 @@ class Streamer(object):
             self._emb_model = _emb_model
             self.confidence =_confidence
             self.scale = 3/5
-            self.client = udp_client.SimpleUDPClient("localhost", 3000)
+            #self.client = udp_client.SimpleUDPClient("localhost", 3000)
             self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
-            #self.ws= create_connection("ws://localhost:3000")
+            #self.ws= create_connection("ws://localhost:3000") #use this for local testing
             self.detector = self._load_serialized_model()
             self.load_face_datas()
             with open('faceSizes.pickle', 'rb') as handle:
@@ -38,6 +38,8 @@ class Streamer(object):
             self.vs = None
             self.fps = None
             self.tick = 0
+            with open('camera.txt') as f:
+                self.cameraNum = f.read(1)
 
     def load_face_datas(self,_recognizer = "output/recognizer.pickle",
             _le = "output/le.pickle"):
@@ -141,8 +143,8 @@ class Streamer(object):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
                     
                     
-                    self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
-                    wsString = json.dumps([name,int(midX),int(depth*10)])
+                    #self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
+                    wsString = json.dumps([name,int(midX),int(depth*10),self.cameraNum])
                     self.ws.send(wsString) #sending to website
                     
             # update the FPS counter
