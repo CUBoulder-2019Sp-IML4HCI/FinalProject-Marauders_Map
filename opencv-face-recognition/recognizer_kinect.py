@@ -40,7 +40,7 @@ class Streamer_kinect(Streamer):
         # loop over frames from the video file stream
         while True:
             # grab the frame from the threaded video stream
-            print("here")
+            # print("here")
             frame = test_depth.get_video()
             depth_frame = cv2.GaussianBlur(test_depth.get_depth(), (5, 5), 0)
             cv2.imshow('Depth', depth_frame)
@@ -117,9 +117,9 @@ class Streamer_kinect(Streamer):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
                     
                     
-                    self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
-                    # wsString = json.dumps([name,int(midX),int(depth*10)])
-                    # self.ws.send(wsString)
+                    # self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
+                    wsString = json.dumps([name,int(midX),int(depth*10)])
+                    self.ws.send(wsString)
 
             # update the FPS counter
             self.fps.update()
@@ -136,8 +136,8 @@ class Streamer_kinect(Streamer):
                 self.add_images(test_depth.get_video)
 
         self.fps.stop()
-        print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-        print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+        print("[INFO] elasped time: {:.2f}".format(self.fps.elapsed()))
+        print("[INFO] approx. FPS: {:.2f}".format(self.fps.fps()))
 
         # do a bit of cleanup
         cv2.destroyAllWindows()
