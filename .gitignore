@@ -5,4 +5,5 @@
 *.pyc
 *.mp4
 __pycache__/
+\opencv-face-recognition\camera.txt
 
