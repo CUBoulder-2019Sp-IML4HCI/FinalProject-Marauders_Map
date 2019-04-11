@@ -161,8 +161,8 @@ class Streamer(object):
             if key == ord("n"):
                 self.add_images(self.get_frame)
         self.fps.stop()
-        print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-        print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+        print("[INFO] elasped time: {:.2f}".format(self.fps.elapsed()))
+        print("[INFO] approx. FPS: {:.2f}".format(self.fps.fps()))
 
         # do a bit of cleanup
         cv2.destroyAllWindows()
