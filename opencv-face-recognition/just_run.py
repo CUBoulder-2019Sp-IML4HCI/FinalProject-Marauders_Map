@@ -21,6 +21,7 @@ if args['embedd'] or args['train']:
     t = ModelTrainer()
     t.train_and_save()
 if args['kinect']:
+    print("No support")
     from recognizer_kinect import Streamer_kinect as S_1
     s= S_1()
     s.main_loop_kinnect()

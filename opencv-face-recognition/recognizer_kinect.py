@@ -14,8 +14,9 @@ import os
 from pythonosc import udp_client
 from websocket import create_connection
 import json
-from kinect import test_depth
+
 from freenect import sync_get_depth as get_depth
+from freenect import sync_get_video as get_video
 import matplotlib
 matplotlib.use('PS')
 import matplotlib.pyplot as plt
@@ -41,8 +42,8 @@ class Streamer_kinect(Streamer):
         while True:
             # grab the frame from the threaded video stream
             # print("here")
-            frame = test_depth.get_video()
-            depth_frame = cv2.GaussianBlur(test_depth.get_depth(), (5, 5), 0)
+            frame = get_video()
+            depth_frame = cv2.GaussianBlur(get_depth(), (5, 5), 0)
             cv2.imshow('Depth', depth_frame)
             # print(np.array(depth_frame).shape)
 
