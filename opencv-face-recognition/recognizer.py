@@ -18,7 +18,7 @@ import json
 import shutil
 from embedder import Embedder
 from  trainer import ModelTrainer
-
+from tkinter import *
 
 class Streamer(object):
     def __init__(self,_detector="face_detection_model",\
@@ -48,7 +48,9 @@ class Streamer(object):
                 self.cameraX = data['cameraX']
                 self.cameraY = data['cameraY']
                 self.declination = data['cameraDeclination']
-				
+			
+            self.train_name = None
+            self.set_up_tk()
 				
             #self.fov = 70 #degrees
 
@@ -244,7 +246,8 @@ class Streamer(object):
         return self.vs.read()
 
     def add_images(self,get_frame):
-        name = input("What is your name? ")
+        self._run_tk_loop()
+        name = self.train_name
         self._add_face_size(name)
         path = os.path.join("dataset", name)
         if os.path.isdir(path):
@@ -274,3 +277,21 @@ class Streamer(object):
         # cv2.destroyWindow("Frame")
         
         return 
+
+    def set_up_tk(self):
+        self.root = Tk()
+        self.root.title("New Application")
+        self.root.geometry("640x640+0+0")
+        heading= Label(self.root, text="Welcome!", font=("arial",40,"bold"), fg="steelblue") .pack()
+        label1= Label(self.root, text="Enter your name: ",font=("arial",20,"bold"),fg="black").place(x=10,y=200)
+        name=StringVar()
+        entry_box= Entry(self.root, textvariable=name, width=25, bg="steelblue").place(x=200, y=203)
+        print("setting up")
+        def do_it():
+            self.train_name = str(name.get())
+            self.root.destroy()
+        work= Button(self.root, text="ENTER", width=30, height=5, bg="steelblue", command=do_it).place(x=250,y=300)
+        
+
+    def _run_tk_loop(self):
+        self.root.mainloop()
