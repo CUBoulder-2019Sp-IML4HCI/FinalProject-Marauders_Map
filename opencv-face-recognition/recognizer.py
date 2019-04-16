@@ -2,6 +2,7 @@
 recognize along with depth
 '''
 
+from centroidtracker import CentroidTracker
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
@@ -17,8 +18,10 @@ from websocket import create_connection
 import json
 import shutil
 from embedder import Embedder
-from  trainer import ModelTrainer
+from trainer import ModelTrainer
 from tkinter import *
+
+import collections
 
 class Streamer(object):
     def __init__(self,_detector="face_detection_model",\
@@ -51,7 +54,13 @@ class Streamer(object):
 			
             self.train_name = None
             self.set_up_tk()
-				
+
+            self.ct = CentroidTracker()
+
+            self.user = dict()
+            self.user_buffer = collections.defaultdict(int)
+            self.user_threshold = 50
+
             #self.fov = 70 #degrees
 
     def load_face_datas(self,_recognizer = "output/recognizer.pickle",
@@ -78,6 +87,27 @@ class Streamer(object):
         with open('faceSizes.pickle', 'wb') as handle:
             pickle.dump(self.faceSizes, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+    def add_cv_box(self,frame,objectID,box,centroid):
+        startX,startY,endX,endY = box
+        midX,midY = centroid
+        text = "{}".format(self.user[objectID])
+        y = startY - 10 if startY - 10 > 10 else startY + 10
+        cv2.rectangle(frame, (startX, startY), (endX, endY),
+            (0, 0, 255), 2)
+        cv2.putText(frame, text, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+        id_tag = "ID {}".format(objectID)
+        cv2.putText(frame, id_tag, (midX - 10, midY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        
+        cv2.circle(frame, (midX, midY), 4, (0, 255, 0), -1)
+
+    def add_user(self,objectID,name):
+        if objectID not in self.user:
+            self.user_buffer[objectID] +=1
+
+        if self.user_buffer[objectID] > self.user_threshold:
+            del self.user_buffer[objectID]
+            self.user[objectID] = name
+
     def main_loop(self):
         print("[INFO] starting video stream...")
         self.vs = VideoStream(src=0).start()
@@ -97,10 +127,13 @@ class Streamer(object):
             frame = imutils.resize(frame, width=600)
             (h, w) = frame.shape[:2]
 
-            # construct a blob from the image
+            # construct  a blob from the image
             imageBlob = cv2.dnn.blobFromImage(
                 cv2.resize(frame, (300, 300)), 1.0, (300, 300),
                 (104.0, 177.0, 123.0), swapRB=False, crop=False)
+            
+            rects = list()
+            centers= dict()
 
             # apply OpenCV's deep learning-based face detector to localize
             # faces in the input image
@@ -119,8 +152,28 @@ class Streamer(object):
                     # the face
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                     (startX, startY, endX, endY) = box.astype("int")
-                    midX = (startX + endX) // 2
-                    midY = (startY + endY) // 2
+                    rects.append(box.astype("int"))
+                    midX = int((startX + endX) / 2.0)
+                    midY = int((startY + endY) / 2.0)
+                    centers[(midX,midY)] = [startX, startY, endX, endY]
+            
+            detected_faces = None
+            if len(rects)>0:
+                detected_faces = self.ct.update(rects)
+
+            if detected_faces:
+                for (objectID,centroid) in detected_faces.items():
+                    try:
+                        bound_box = startX,startY,endX,endY = centers[(centroid[0],centroid[1])]
+                    except KeyError:
+                        continue
+                    if objectID in self.user:
+                        self.add_cv_box(frame,objectID,bound_box,centroid)
+                        continue
+                    #TODO : need to put this on each face after we get objects detected
+                    # construct a blob for the face ROI, then pass the blob
+                    # through our face embedding model to obtain the 128-d
+                    # quantification of the face
                     # extract the face ROI
                     face = frame[startY:endY, startX:endX]
                     (fH, fW) = face.shape[:2]
@@ -128,10 +181,6 @@ class Streamer(object):
                     # ensure the face width and height are sufficiently large
                     if fW < 20 or fH < 20:
                         continue
-
-                    # construct a blob for the face ROI, then pass the blob
-                    # through our face embedding model to obtain the 128-d
-                    # quantification of the face
                     faceBlob = cv2.dnn.blobFromImage(face, 1.0 / 255,
                         (96, 96), (0, 0, 0), swapRB=True, crop=False)
                     self.embedder.setInput(faceBlob)
@@ -142,6 +191,7 @@ class Streamer(object):
                     j = np.argmax(preds)
                     proba = preds[j]
                     name = self.le.classes_[j]
+                    self.add_user(objectID,name)
                     # print(name)       
                     # draw the bounding box of the face along with the
                     # associated probability
@@ -150,6 +200,7 @@ class Streamer(object):
                     #depth=1;
 					
 					
+                    # #TODO : to add what each angle means
                     phiR = math.radians(self.declination)
                     theta = self.fov*((w/2 - midX)/w) +self.cameraAngle
                     thetaR = math.radians(theta) 
@@ -162,8 +213,11 @@ class Streamer(object):
                     y = startY - 10 if startY - 10 > 10 else startY + 10
                     cv2.rectangle(frame, (startX, startY), (endX, endY),
                         (0, 0, 255), 2)
-                    cv2.putText(frame, text, (startX, y),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+                    cv2.putText(frame, text, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+                    id_tag = "ID {}".format(objectID)
+                    cv2.putText(frame, id_tag, (midX - 10, midY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+		            
+                    cv2.circle(frame, (midX, midY), 4, (0, 255, 0), -1)
                     
                     
                     #self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
@@ -178,10 +232,11 @@ class Streamer(object):
                     
             # update the FPS counter
             self.fps.update()
+            cv2.imshow("Frame", frame)
 
             # show the output frame
             # print(startX-endX)
-            cv2.imshow("Frame", frame)
+           
             key = cv2.waitKey(1) & 0xFF
 
             # if the `q` key was pressed, break from the loop
