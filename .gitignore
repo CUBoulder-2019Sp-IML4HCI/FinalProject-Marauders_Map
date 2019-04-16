@@ -5,5 +5,5 @@
 *.pyc
 *.mp4
 __pycache__/
-opencv-face-recognition/config.json
+*.json
 
