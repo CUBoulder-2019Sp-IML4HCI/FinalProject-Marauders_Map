@@ -28,7 +28,7 @@ class Streamer(object):
             self._detector_path = _detector
             self._emb_model = _emb_model
             self.confidence =_confidence
-            self.scale = 3/5
+            #self.scale = 3/5
             #self.client = udp_client.SimpleUDPClient("localhost", 3000)
             self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
             #self.ws= create_connection("ws://localhost:3000") #use this for local testing
@@ -39,10 +39,18 @@ class Streamer(object):
             self.vs = None
             self.fps = None
             self.tick = 0
-            with open('camera.txt') as f:
-                self.cameraNum = f.read(1)
+            with open('config.json') as json_camera:
+                data = json.load(json_camera)
+                self.scale = data['scale']
+                self.cameraNum = data['camera']
+                self.fov = data['fov']
+                self.cameraAngle = data['cameraAngle']
+                self.cameraX = data['cameraX']
+                self.cameraY = data['cameraY']
+                self.declination = data['cameraDeclination']
 				
-            self.fov = 70 #degrees
+				
+            #self.fov = 70 #degrees
 
     def load_face_datas(self,_recognizer = "output/recognizer.pickle",
             _le = "output/le.pickle"):
@@ -136,15 +144,15 @@ class Streamer(object):
                     # draw the bounding box of the face along with the
                     # associated probability
                     faceWidth = abs(startX-endX);        
-                    depth = self.scale*4*self.faceSizes[name]/faceWidth
+                    depth = self.scale*self.faceSizes[name]/faceWidth
                     #depth=1;
 					
 					
-					
-                    theta = self.fov*((w/2 - midX)/w)
-                    thetaR = math.radians(theta)
-                    faceY = math.cos(thetaR)*depth
-                    faceX = math.sin(thetaR)*depth
+                    phiR = math.radians(self.declination)
+                    theta = self.fov*((w/2 - midX)/w) +self.cameraAngle
+                    thetaR = math.radians(theta) 
+                    faceY = math.cos(phiR)*math.cos(thetaR)*depth + self.cameraY
+                    faceX = math.cos(phiR)*math.sin(thetaR)*depth + self.cameraX
 					
 					
 					
