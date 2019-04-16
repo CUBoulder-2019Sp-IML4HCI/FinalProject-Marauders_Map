@@ -11,6 +11,7 @@ import pickle
 import time
 import cv2
 import os
+import math
 from pythonosc import udp_client
 from websocket import create_connection
 import json
@@ -40,6 +41,8 @@ class Streamer(object):
             self.tick = 0
             with open('camera.txt') as f:
                 self.cameraNum = f.read(1)
+				
+            self.fov = 70 #degrees
 
     def load_face_datas(self,_recognizer = "output/recognizer.pickle",
             _le = "output/le.pickle"):
@@ -135,7 +138,17 @@ class Streamer(object):
                     faceWidth = abs(startX-endX);        
                     depth = self.scale*4*self.faceSizes[name]/faceWidth
                     #depth=1;
-                    text = "{}: {:.2f}% d:{:.1f}".format(name, proba * 100,depth)
+					
+					
+					
+                    theta = self.fov*((w/2 - midX)/w)
+                    thetaR = math.radians(theta)
+                    faceY = math.cos(thetaR)*depth
+                    faceX = math.sin(thetaR)*depth
+					
+					
+					
+                    text = "{}: {:.2f}% dep:{:.1f} a:{:.1f} y:{:.1f} x:{:.1f}".format(name, proba * 100,depth,theta,faceY,faceX)
                     y = startY - 10 if startY - 10 > 10 else startY + 10
                     cv2.rectangle(frame, (startX, startY), (endX, endY),
                         (0, 0, 255), 2)
@@ -144,7 +157,13 @@ class Streamer(object):
                     
                     
                     #self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
-                    wsString = json.dumps([name,int(midX),int(depth*10),self.cameraNum])
+					
+					#pix2angle = self.fov/w; # degrees per pix
+
+					
+                    #wsString = json.dumps([name,int(midX),int(depth*10),self.cameraNum])
+                    wsString = json.dumps([name,faceX,faceY,self.cameraNum])
+					
                     self.ws.send(wsString) #sending to website
                     
             # update the FPS counter
