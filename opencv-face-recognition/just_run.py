@@ -1,4 +1,4 @@
-from recognizer import Streamer as S_2
+from newrecognizer import Streamer as S_2
 from embedder import Embedder
 from trainer import ModelTrainer
 import argparse
