@@ -87,20 +87,38 @@ class Streamer(object):
         with open('faceSizes.pickle', 'wb') as handle:
             pickle.dump(self.faceSizes, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    def add_cv_box(self,frame,objectID,box,centroid):
+    def add_cv_box(self,frame,box,centroid,objectID=None,name=None,percentage=None):
+        '''
+        Two ways to call the functions:
+        1) you know the objectId and call with that
+        2) you don't know the objectId, but know a person's name
+        '''
+        
         startX,startY,endX,endY = box
         midX,midY = centroid
-        text = "{} d={:.2f}".format(self.user[objectID],self.get_depth(objectID,abs(endX-startX)))
+        if name is None: #super confident with the user
+            depth = self.get_depth(self.user[objectID],abs(endX-startX))
+            text = "{} d={:.2f}".format(self.user[objectID],depth)
+        else:
+            depth = self.get_depth(name,abs(endX-startX))
+            text = "{} d={:.2f} {:.2f}".format(name,depth,percentage)
+
+        faceX,faceY = self.calc_angles(midX,midY,depth)
         y = startY - 10 if startY - 10 > 10 else startY + 10
+
         cv2.rectangle(frame, (startX, startY), (endX, endY),
             (0, 0, 255), 2)
         cv2.putText(frame, text, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-        id_tag = "ID {}".format(objectID)
-        cv2.putText(frame, id_tag, (midX - 10, midY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-        
+        id_tag = "{}".format(objectID)
+        cv2.putText(frame, id_tag, (midX - 10, midY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)     
         cv2.circle(frame, (midX, midY), 4, (0, 255, 0), -1)
+        self.send_message(name,faceX,faceY)
 
     def add_user(self,objectID,name):
+        '''
+        buffers until is confident on the person 
+        #TODO : to keep on removing a person every 30 seconds
+        '''
         if objectID not in self.user:
             self.user_buffer[objectID].append(name)
 
@@ -108,9 +126,32 @@ class Streamer(object):
             self.user[objectID] = max(set(self.user_buffer[objectID]), key=self.user_buffer[objectID].count)
             del self.user_buffer[objectID]
     
-    def get_depth(self,objectId,faceWidth):
-        return self.scale*self.faceSizes[self.user[objectId]]/faceWidth
+    def get_depth(self,name,faceWidth):
+        '''
+        returns the depth for that name
+        '''
+        return self.scale*self.faceSizes[name]/faceWidth
 
+    def calc_angles(self,midX,midY,depth):
+        '''
+        return faceX,faceY used in website
+        '''
+        h,w = 337,600
+        phiR = math.radians(self.declination)
+        theta = self.fov*((w/2 - midX)/w) +self.cameraAngle
+        thetaR = math.radians(theta) 
+        faceY = math.cos(phiR)*math.cos(thetaR)*depth + self.cameraY
+        faceX = math.cos(phiR)*math.sin(thetaR)*depth + self.cameraX
+        return faceX,faceY
+    
+    def send_message(self,name,x,y):
+        '''
+        Sending data to website
+        '''
+        wsString = json.dumps([name,x,y,self.cameraNum])
+        self.ws.send(wsString) #sending to website
+                    
+        
     def main_loop(self):
         print("[INFO] starting video stream...")
         self.vs = VideoStream(src=0).start()
@@ -129,7 +170,7 @@ class Streamer(object):
             # dimensions
             frame = imutils.resize(frame, width=600)
             (h, w) = frame.shape[:2]
-
+            
             # construct  a blob from the image
             imageBlob = cv2.dnn.blobFromImage(
                 cv2.resize(frame, (300, 300)), 1.0, (300, 300),
@@ -171,67 +212,39 @@ class Streamer(object):
                     except KeyError:
                         continue
                     if objectID in self.user:
-                        self.add_cv_box(frame,objectID,bound_box,centroid)
-                        continue
-                    #TODO : need to put this on each face after we get objects detected
-                    # construct a blob for the face ROI, then pass the blob
-                    # through our face embedding model to obtain the 128-d
-                    # quantification of the face
-                    # extract the face ROI
-                    face = frame[startY:endY, startX:endX]
-                    (fH, fW) = face.shape[:2]
+                        self.add_cv_box(frame,bound_box,centroid,objectID)
+                    else:
+                        #TODO : need to put this on each face after we get objects detected
+                        # construct a blob for the face ROI, then pass the blob
+                        # through our face embedding model to obtain the 128-d
+                        # quantification of the face
+                        # extract the face ROI
+                        face = frame[startY:endY, startX:endX]
+                        (fH, fW) = face.shape[:2]
 
-                    # ensure the face width and height are sufficiently large
-                    if fW < 20 or fH < 20:
-                        continue
-                    faceBlob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                        (96, 96), (0, 0, 0), swapRB=True, crop=False)
-                    self.embedder.setInput(faceBlob)
-                    vec = self.embedder.forward()
+                        # ensure the face width and height are sufficiently large
+                        if fW < 20 or fH < 20:
+                            continue
+                        faceBlob = cv2.dnn.blobFromImage(face, 1.0 / 255,
+                            (96, 96), (0, 0, 0), swapRB=True, crop=False)
+                        self.embedder.setInput(faceBlob)
+                        vec = self.embedder.forward()
 
-                    # perform classification to recognize the face
-                    preds = self.recognizer.predict_proba(vec)[0]
-                    j = np.argmax(preds)
-                    proba = preds[j]
-                    name = self.le.classes_[j]
-                    self.add_user(objectID,name)
-                    # print(name)       
-                    # draw the bounding box of the face along with the
-                    # associated probability
-                    faceWidth = abs(startX-endX)       
-                    depth = self.scale*self.faceSizes[name]/faceWidth
-                    #depth=1;
-					
-					
-                    # #TODO : to add what each angle means
-                    phiR = math.radians(self.declination)
-                    theta = self.fov*((w/2 - midX)/w) +self.cameraAngle
-                    thetaR = math.radians(theta) 
-                    faceY = math.cos(phiR)*math.cos(thetaR)*depth + self.cameraY
-                    faceX = math.cos(phiR)*math.sin(thetaR)*depth + self.cameraX
-					
-					
-					
-                    text = "{}: {:.2f}% dep:{:.1f} a:{:.1f} y:{:.1f} x:{:.1f}".format(name, proba * 100,depth,theta,faceY,faceX)
-                    y = startY - 10 if startY - 10 > 10 else startY + 10
-                    cv2.rectangle(frame, (startX, startY), (endX, endY),
-                        (0, 0, 255), 2)
-                    cv2.putText(frame, text, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-                    id_tag = "ID {}".format(objectID)
-                    cv2.putText(frame, id_tag, (midX - 10, midY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-		            
-                    cv2.circle(frame, (midX, midY), 4, (0, 255, 0), -1)
+                        # perform classification to recognize the face
+                        preds = self.recognizer.predict_proba(vec)[0]
+                        j = np.argmax(preds)
+                        proba = preds[j]
+                        name = self.le.classes_[j]
+                        self.add_user(objectID,name)
+                        # print(name)       
+                        # draw the bounding box of the face along with the
+                        # associated probabilit
+                        
+                        
+                        self.add_cv_box(frame,bound_box,centroid,None,name,proba)
                     
-                    
-                    #self.client.send_message("/faces", [name,int(midX),int(depth*10)] )
-					
-					#pix2angle = self.fov/w; # degrees per pix
-
 					
                     #wsString = json.dumps([name,int(midX),int(depth*10),self.cameraNum])
-                    wsString = json.dumps([name,faceX,faceY,self.cameraNum])
-					
-                    self.ws.send(wsString) #sending to website
                     
             # update the FPS counter
             self.fps.update()
