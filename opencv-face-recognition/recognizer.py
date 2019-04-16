@@ -58,7 +58,7 @@ class Streamer(object):
             self.ct = CentroidTracker()
 
             self.user = dict()
-            self.user_buffer = collections.defaultdict(int)
+            self.user_buffer = collections.defaultdict(list)
             self.user_threshold = 50
 
             #self.fov = 70 #degrees
@@ -90,7 +90,7 @@ class Streamer(object):
     def add_cv_box(self,frame,objectID,box,centroid):
         startX,startY,endX,endY = box
         midX,midY = centroid
-        text = "{}".format(self.user[objectID])
+        text = "{} d={:.2f}".format(self.user[objectID],self.get_depth(objectID,abs(endX-startX)))
         y = startY - 10 if startY - 10 > 10 else startY + 10
         cv2.rectangle(frame, (startX, startY), (endX, endY),
             (0, 0, 255), 2)
@@ -102,11 +102,14 @@ class Streamer(object):
 
     def add_user(self,objectID,name):
         if objectID not in self.user:
-            self.user_buffer[objectID] +=1
+            self.user_buffer[objectID].append(name)
 
-        if self.user_buffer[objectID] > self.user_threshold:
+        if len(self.user_buffer[objectID]) >= self.user_threshold:
+            self.user[objectID] = max(set(self.user_buffer[objectID]), key=self.user_buffer[objectID].count)
             del self.user_buffer[objectID]
-            self.user[objectID] = name
+    
+    def get_depth(self,objectId,faceWidth):
+        return self.scale*self.faceSizes[self.user[objectId]]/faceWidth
 
     def main_loop(self):
         print("[INFO] starting video stream...")
@@ -195,7 +198,7 @@ class Streamer(object):
                     # print(name)       
                     # draw the bounding box of the face along with the
                     # associated probability
-                    faceWidth = abs(startX-endX);        
+                    faceWidth = abs(startX-endX)       
                     depth = self.scale*self.faceSizes[name]/faceWidth
                     #depth=1;
 					
@@ -335,15 +338,15 @@ class Streamer(object):
 
     def set_up_tk(self):
         self.root = Tk()
-        self.root.title("New Application")
+        self.root.title("Adding a user")
         self.root.geometry("640x640+0+0")
         heading= Label(self.root, text="Welcome!", font=("arial",40,"bold"), fg="steelblue") .pack()
         label1= Label(self.root, text="Enter your name: ",font=("arial",20,"bold"),fg="black").place(x=10,y=200)
         name=StringVar()
-        entry_box= Entry(self.root, textvariable=name, width=25, bg="steelblue").place(x=200, y=203)
-        print("setting up")
+        entry_box= Entry(self.root, textvariable=name, width=25, fg="white" ,bg="steelblue").place(x=200, y=203)
+        print("[INFO] Setting up tkinter for user input")
         def do_it():
-            self.train_name = str(name.get())
+            self.train_name = str(name.get()).strip().lower()
             self.root.destroy()
         work= Button(self.root, text="ENTER", width=30, height=5, bg="steelblue", command=do_it).place(x=250,y=300)
         

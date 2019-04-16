@@ -34,7 +34,6 @@ class CentroidTracker():
 	def update(self, rects):
 		# check to see if the list of input bounding box rectangles
 		# is empty
-		print("Reached with : "+str(len(rects)))
 		if len(rects) == 0:
 			# loop over any existing tracked objects and mark them
 			# as disappeared
@@ -60,8 +59,7 @@ class CentroidTracker():
 			cX = int((startX + endX) / 2.0)
 			cY = int((startY + endY) / 2.0)
 			inputCentroids[i] = (cX, cY)
-		
-		print(inputCentroids)
+	
 		# if we are currently not tracking any objects take the input
 		# centroids and register each of them
 		if len(self.objects) == 0:
