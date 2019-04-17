@@ -59,12 +59,13 @@ class CentroidTracker():
 			cX = int((startX + endX) / 2.0)
 			cY = int((startY + endY) / 2.0)
 			inputCentroids[i] = (cX, cY)
-	
+
 		# if we are currently not tracking any objects take the input
 		# centroids and register each of them
 		if len(self.objects) == 0:
 			for i in range(0, len(inputCentroids)):
 				self.register(inputCentroids[i])
+
 		# otherwise, are are currently tracking objects so we need to
 		# try to match the input centroids to existing object
 		# centroids
@@ -90,6 +91,7 @@ class CentroidTracker():
 			# finding the smallest value in each column and then
 			# sorting using the previously computed row index list
 			cols = D.argmin(axis=1)[rows]
+
 			# in order to determine if we need to update, register,
 			# or deregister an object we need to keep track of which
 			# of the rows and column indexes we have already examined
@@ -116,10 +118,12 @@ class CentroidTracker():
 				# column indexes, respectively
 				usedRows.add(row)
 				usedCols.add(col)
+
 			# compute both the row and column index we have NOT yet
 			# examined
 			unusedRows = set(range(0, D.shape[0])).difference(usedRows)
 			unusedCols = set(range(0, D.shape[1])).difference(usedCols)
+
 			# in the event that the number of object centroids is
 			# equal or greater than the number of input centroids
 			# we need to check and see if some of these objects have
@@ -137,4 +141,13 @@ class CentroidTracker():
 					# for warrants deregistering the object
 					if self.disappeared[objectID] > self.maxDisappeared:
 						self.deregister(objectID)
+
+			# otherwise, if the number of input centroids is greater
+			# than the number of existing object centroids we need to
+			# register each new input centroid as a trackable object
+			else:
+				for col in unusedCols:
+					self.register(inputCentroids[col])
+
+		# return the set of trackable objects
 		return self.objects

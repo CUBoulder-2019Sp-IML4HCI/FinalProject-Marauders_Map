@@ -99,6 +99,7 @@ class Streamer(object):
         if name is None: #super confident with the user
             depth = self.get_depth(self.user[objectID],abs(endX-startX))
             text = "{} d={:.2f}".format(self.user[objectID],depth)
+            name = self.user[objectID]
         else:
             depth = self.get_depth(name,abs(endX-startX))
             text = "{} d={:.2f} {:.2f}".format(name,depth,percentage)
@@ -189,7 +190,6 @@ class Streamer(object):
                 # extract the confidence (i.e., probability) associated with
                 # the prediction
                 confidence = detections[0, 0, i, 2]
-
                 # filter out weak detections
                 if confidence > self.confidence:
                     # compute the (x, y)-coordinates of the bounding box for
@@ -204,8 +204,10 @@ class Streamer(object):
             detected_faces = None
             if len(rects)>0:
                 detected_faces = self.ct.update(rects)
-
+            print(len(rects))
             if detected_faces:
+                if len(detected_faces)>2:
+                    print("more than 2 users in the frame")
                 for (objectID,centroid) in detected_faces.items():
                     try:
                         bound_box = startX,startY,endX,endY = centers[(centroid[0],centroid[1])]
