@@ -7,6 +7,7 @@ from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
 import argparse
+
 import imutils
 import pickle
 import time
@@ -306,7 +307,8 @@ class Streamer(object):
             # means our minimum probability test (thus helping filter out
             # weak detections)
             if confidence > self.confidence:
-                path = os.path.join("dataset",name,f"{name}_{time.time()}.jpeg")
+                # path = os.path.join('dataset',name,f'{name}_{time.time()}.jpeg')
+                path = os.path.join('dataset',name,name+'_'+str(time.time())+'.jpeg')
                 cv2.imwrite(path, image)
                 self.tick = time.time()
         if time.time() - self.tick < 1:
