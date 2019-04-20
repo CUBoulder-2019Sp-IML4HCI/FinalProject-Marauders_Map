@@ -204,10 +204,7 @@ class Streamer(object):
             detected_faces = None
             if len(rects)>0:
                 detected_faces = self.ct.update(rects)
-            print(len(rects))
             if detected_faces:
-                if len(detected_faces)>2:
-                    print("more than 2 users in the frame")
                 for (objectID,centroid) in detected_faces.items():
                     try:
                         bound_box = startX,startY,endX,endY = centers[(centroid[0],centroid[1])]
@@ -261,7 +258,12 @@ class Streamer(object):
             if key == ord("q"):
                 break
             if key == ord("n"):
+                self.user = dict()
+                self.user_buffer = collections.defaultdict(list)
                 self.add_images(self.get_frame)
+            if key == ord("c"):
+                self.user = dict()
+                self.user_buffer = collections.defaultdict(list)
         self.fps.stop()
         print("[INFO] elasped time: {:.2f}".format(self.fps.elapsed()))
         print("[INFO] approx. FPS: {:.2f}".format(self.fps.fps()))
@@ -362,7 +364,7 @@ class Streamer(object):
         print("[INFO] Setting up tkinter for user input")
         def do_it():
             self.train_name = str(name.get()).strip().lower()
-            self.root.destroy()
+            self.root.quit()
         work= Button(self.root, text="ENTER", width=30, height=5, bg="steelblue", command=do_it).place(x=250,y=300)
         
 
