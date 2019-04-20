@@ -364,9 +364,13 @@ class Streamer(object):
         print("[INFO] Setting up tkinter for user input")
         def do_it():
             self.train_name = str(name.get()).strip().lower()
-            self.root.quit()
+            self.root.destroy()
+            self.root = None
         work= Button(self.root, text="ENTER", width=30, height=5, bg="steelblue", command=do_it).place(x=250,y=300)
         
 
     def _run_tk_loop(self):
+        # print(self.root)
+        if self.root is None:
+            self.set_up_tk()
         self.root.mainloop()
