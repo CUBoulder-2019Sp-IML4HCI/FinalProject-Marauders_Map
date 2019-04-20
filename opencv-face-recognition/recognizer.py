@@ -332,10 +332,12 @@ class Streamer(object):
         while detections < 6:
             frame = get_frame()
             detections += self.extract_training_faces(frame, name)
-            self.fps.update()
+            # self.fps.update()
 
             key = cv2.waitKey(1) & 0xFF
-
+            if detections == 2:
+                text = "Turn right"
+                cv2.putText(frame, text, (100, 100),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
             if key == ord("q"):
                 return
 
