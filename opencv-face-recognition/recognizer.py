@@ -7,7 +7,6 @@ from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
 import argparse
-
 import imutils
 import pickle
 import time
@@ -307,8 +306,7 @@ class Streamer(object):
             # means our minimum probability test (thus helping filter out
             # weak detections)
             if confidence > self.confidence:
-                # path = os.path.join('dataset',name,f'{name}_{time.time()}.jpeg')
-                path = os.path.join('dataset',name,name+'_'+str(time.time())+'.jpeg')
+                path = os.path.join("dataset",name,f"{name}_{time.time()}.jpeg")
                 cv2.imwrite(path, image)
                 self.tick = time.time()
         if time.time() - self.tick < 1:
@@ -338,8 +336,18 @@ class Streamer(object):
 
             key = cv2.waitKey(1) & 0xFF
             if detections == 2:
-                text = "Turn right"
-                cv2.putText(frame, text, (100, 100),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+            	text = "Turn right"
+            	cv2.putText(frame, text, (100, 100),cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 2)
+            if detections == 3:
+            	text ="Turn left"
+            	cv2.putText(frame,text,(100,100),cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 2)
+            if detections == 4:
+            	text= "Tilt head up"
+            	cv2.putText(frame,text,(100,100),cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 2)
+            if detections == 5:
+            	text = "Tilt head down"
+            	cv2.putText(frame,text,(100,100),cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 2)
+
             if key == ord("q"):
                 return
 
