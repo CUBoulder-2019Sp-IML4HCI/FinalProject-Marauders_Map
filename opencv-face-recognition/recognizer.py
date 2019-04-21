@@ -368,17 +368,18 @@ class Streamer(object):
     def set_up_tk(self):
         self.root = Tk()
         self.root.title("Adding a user")
-        self.root.geometry("640x640+0+0")
+        self.root.geometry("320x300+0+0")
         heading= Label(self.root, text="Welcome!", font=("arial",40,"bold"), fg="steelblue") .pack()
-        label1= Label(self.root, text="Enter your name: ",font=("arial",20,"bold"),fg="black").place(x=10,y=200)
+        label1= Label(self.root, text="Enter your name: ",font=("arial",15,"bold"),fg="black").place(x=10,y=100)
         name=StringVar()
-        entry_box= Entry(self.root, textvariable=name, width=25, fg="white" ,bg="steelblue").place(x=200, y=203)
+        entry_box= Entry(self.root, textvariable=name, width=15, fg="white" ,bg="steelblue").place(x=155, y=103)
         print("[INFO] Setting up tkinter for user input")
         def do_it():
             self.train_name = str(name.get()).strip().lower()
             self.root.destroy()
             self.root = None
-        work= Button(self.root, text="ENTER", width=30, height=5, bg="steelblue", command=do_it).place(x=250,y=300)
+        work= Button(self.root, text="ENTER", width=30, height=5, bg="steelblue", command=do_it).place(x=36,y=200)
+        # root.bind('<Return>',work)
         
 
     def _run_tk_loop(self):
