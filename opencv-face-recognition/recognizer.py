@@ -33,7 +33,7 @@ class Streamer(object):
             self.confidence =_confidence
             #self.scale = 3/5
             #self.client = udp_client.SimpleUDPClient("localhost", 3000)
-            self.ws= create_connection("ws://mauradermap.herokuapp.com/")
+            self.ws= create_connection("ws://maraudermap.herokuapp.com/")
             #self.ws= create_connection("ws://localhost:3000") #use this for local testing
             self.detector = self._load_serialized_model()
             self.load_face_datas()
