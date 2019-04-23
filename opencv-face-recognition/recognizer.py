@@ -33,7 +33,7 @@ class Streamer(object):
             self.confidence =_confidence
             #self.scale = 3/5
             #self.client = udp_client.SimpleUDPClient("localhost", 3000)
-            self.ws= create_connection("ws://rhubarb-tart-58531.herokuapp.com/")
+            self.ws= create_connection("ws://mauradermap.herokuapp.com/")
             #self.ws= create_connection("ws://localhost:3000") #use this for local testing
             self.detector = self._load_serialized_model()
             self.load_face_datas()
@@ -160,12 +160,16 @@ class Streamer(object):
 
         # start the FPS throughput estimator
         self.fps = FPS().start()
-
+        train = 0
         # loop over frames from the video file stream
         while True:
             # grab the frame from the threaded video stream
             frame = self.vs.read()
-
+            train += 1
+            if train % 360 == 0:
+                self.user = dict()
+                self.user_buffer = collections.defaultdict(list)
+                train = 0
             # resize the frame to have a width of 600 pixels (while
             # maintaining the aspect ratio), and then grab the image
             # dimensions
@@ -366,6 +370,10 @@ class Streamer(object):
         return 
 
     def set_up_tk(self):
+        def do_it():
+            self.train_name = str(name.get()).strip().lower()
+            self.root.destroy()
+            self.root = None
         self.root = Tk()
         self.root.title("Adding a user")
         self.root.geometry("320x300+0+0")
@@ -374,10 +382,6 @@ class Streamer(object):
         name=StringVar()
         entry_box= Entry(self.root, textvariable=name, width=15, fg="white" ,bg="steelblue").place(x=155, y=103)
         print("[INFO] Setting up tkinter for user input")
-        def do_it():
-            self.train_name = str(name.get()).strip().lower()
-            self.root.destroy()
-            self.root = None
         work= Button(self.root, text="ENTER", width=30, height=5, bg="steelblue", command=do_it).place(x=36,y=200)
         # root.bind('<Return>',work)
         
