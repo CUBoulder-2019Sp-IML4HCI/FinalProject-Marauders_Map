@@ -19,7 +19,7 @@ We had 2 main problems in the entire project:
 
 // TO change ? Following are some of the techniques we tried, and will be explaining why we chose some. 
 
-### Face tracking and identification : 
+### Face tracking and identification 🧒🏻: 
 
 In order to get a personalized effect for the user to use our system, we planned to identify each person seperately instead of tagging them as person `x`. This was quiet challenging to do in real time. After some digging we planned to use transfer learning over resnet layers to utilize the convolutional layer to produce the abstract representation of the face.
 
@@ -29,14 +29,21 @@ In order to get a personalized effect for the user to use our system, we planned
 
     * After loading the facenet architecture with pretrained weights, we can simply perform a single forward propogation to get a list of localized regions of interst with a probability score depicting how probable it is face. This stage is useful for localization of faces, and to detect if it is a face or not. 
 
-    * Facenet model computes a 128 dimension embedding that quantifies as an abstract representation of the face. Each person's 128 dimension would differ from another person, and if we could linearly classify these embeddings in
+    * Facenet model computes a 128 dimension embedding that quantifies as an abstract representation of the face. Each person's 128 dimension would differ from another person, and it would be possible to linearly seperate these embeddings in `nth` dimension to classify each person trained by the system.
+
+    * Using SVM and linear classifier, we classify the detections based on the person's embeddings. As only the regions of interest is passed through the neural network, it is quiet fast in most of the CPU, and real time.
 
 
-    After getting these regions of interests, it is sent to another convolutional network which have weights of resnet layer. The 
-    
-    After removing the last FC layer of the resnet, we send the 128 dimensional vector to a SVM to classify into the different labels representing various people trained in the system.
+    * For each user, we have a trainable module, where they can enter their name and capture upto 5 pics, that will then undergo the embedding process for classification.
 
-    We also aded a common label for unknown user, and added a bunch of celebrities pictures.
+3) ✅ Centroid Tracking : Due to the use of SVM for classification, the classification was jittery as the faces that lie near to the margin was often confused. In order to increase the confidence in the classification, polling method was introduced to ID a particular face after a majority. In 40 consecutive frames, if a face has a majority name, then that face gets that name for the next 400 frames. Once again on the 400th frame, we flush the registered faces, as we wanted to the classification system to be active and correct itself if it got the face wrong the first time.
+
+    * Centroid Tracking uses a simple method of comparing euclidean distances between various centroid of object on the scene. It is a effective algorithm, to track multiple moving objects in the scene without loosing track.
+
+    * For every face in the scene, a centroid is identified and kept in memory. 
+
+    * When a person moves in a subsequent frame, the euclidean distance will be smaller compared to other objects in the scene. If there was a new object in a subsequent frame, the system will assign a new ID. If an object is not present in the scene, after some buffer time, it will lose its ID and will be assigned a new ID when it enters the scene.
+
 
 ## Technologies used
 
