@@ -61,11 +61,6 @@ In order to translate the depth of a face into planar coordinates for usage in r
 
 
 
-
-## Visualization and Localization
-
-
-
 ## Technologies and Libraries
 1) Python
     * imutils (for video interfacing)
@@ -114,9 +109,6 @@ We feel we learnt to develop an user end-to-end trainable computer vision system
 
 * Using a website to display detections from multiple cameras
 
-
-
-## Face Tracking and Neural Network
 
 
 ## References
