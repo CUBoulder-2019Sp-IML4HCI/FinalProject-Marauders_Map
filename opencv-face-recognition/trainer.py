@@ -33,7 +33,7 @@ class ModelTrainer():
     def train_and_save(self):
         #todo : play with gaussian kernel and alpha
         print("[INFO] training model...")
-        recognizer = SVC(C=1.0, kernel="linear", probability=True)
+        recognizer = SVC(C=1.0, kernel="rbf", probability=True)
         recognizer.fit(self.data["embeddings"], self.labels)
         # write the actual face recognition model to disk
         f = open(self._recognizer_path, "wb")
