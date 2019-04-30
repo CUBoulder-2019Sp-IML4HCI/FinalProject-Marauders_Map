@@ -26,7 +26,7 @@ Eric Minor, Supriya Naidu, Ashwin Sankaralingam, Nelson Mitchell, Talia Krause
    
    The webserver which aggregrates all tracking data also services a website, where it will output the locations of detected people. By going to the afformentioned website, a user can view live tracking data in the form of a Marauder's map. The website can also play music and has a link to the project github page for interested parties.
 
-![Map Image](https://github.com/tograh/testrepository/3DTest.png)
+![Map Image](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/ImTheMap.png)
 
 ## Challenges Faced in the project
 The challenges in the project came from three main sources:
