@@ -24,6 +24,8 @@ Eric Minor, Supriya Naidu, Ashwin Sankaralingam, Nelson Mitchell, Talia Krause
 
    Each computer running the facial tracking software displays an image of what the computer sees along with a box around each identifed face and its label. By pressing n on the keyboard when interacting with this display, a dialogue will be opened prompting the user to enter their name. The camera will then record images of the person currently in front of the camera and label those images with the entered name. The algorithm is then trained to identify the new person. A user can also press c to reset the tracking algorithm if someone is mislabeled or press q to quit the program.
    
+   ![Map Image](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/trackingImage.png)
+
    The webserver which aggregrates all tracking data also services a website, where it will output the locations of detected people. By going to the afformentioned website, a user can view live tracking data in the form of a Marauder's map. The website can also play music and has a link to the project github page for interested parties.
 
 ![Map Image](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/ImTheMap.png)
