@@ -74,8 +74,6 @@ In order to get a personalized effect for the user to use our system, we planned
 
 In order to translate the depth of a face into planar coordinates for usage in real-world mappings, the angle of the face in the camera frame was calculated (based on left-right centroid location). Multipling depth by the sine of the angle yields the x coordinate of the face, and multiplying the depth by the cosine of the angle yields the y coordinate of face, relative to the camera. Each camera contains its absolute position in a map, and its pointing angle. These are used to translate face locations to absolute locations in the map. Testing shows that this estimator for distance is accurate to ~2 meters, at which point the detector beings to fail
 
-Data Aggregration and Display
-
 ### Data aggregration and Display: 
 ❌ Centralized Image Process: An initial idea for the project involved streaming all webcam video feeds to one machine which would contain the trained model. Although this method would slightly streamline the process, doing so would require a very powerful computer in order to process all the video data. As it stands, running the model for a single video feed used up approximately 60% of a 4th generation intel i7 processor as tested on a laptop computer. A centralized processing computer would need to handle a large number of video feeds, which would require an unfeasibly fast processor. Instead, a decentralized model where each computer analyzed its own video feed and sent face coordinates to a central server was adopted. This cut down on the amount of data the server needed to handle immensely, making it possible to use a free heroku server.
 
