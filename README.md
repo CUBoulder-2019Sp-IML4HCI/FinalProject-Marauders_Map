@@ -23,15 +23,18 @@
   * [How to Run](https://youtu.be/pv_LqElPHjc)
   
   
-  Website: https://rhubarb-tart-58531.herokuapp.com/
+  ## Final Release
+  
+  Website: https://atlasmaraudermap.herokuapp.com/map
 
-#### TODO:
-* Refactor into classes : Done. Only optimization might be to use the same object instead of loading experiment
-* Visualize a 2d pygame environment (using relative depth) : Done 
-* Connect with Kinect : Done
-* Play with kinect get-depth : Done (not as accurate, so dropping kinect)
-* Create an app that allows to add images directly from app : done, instead of app, have a training loop
-* Adding server code in java script and working on frontend : Done
-* Experimentation with height and angle : almost done, need tuning
-* Centroid tracking : done, need testing
+
+
+## Usage
+
+In order to use the facial tracking, you need run the recognizer locally. Navigate to the folder \FinalProject-Marauders_Map\opencv-face-recognition\ and run the command python just_run.py. After a few seconds, a window should appear showing a live feed from your webcam with boxes around all detected faces. Initially, your face should appear as unknown or be incorrectly labeled. In order to train the model to recognize your face, press n. A dialog box will appear where you can enter your name. Make sure no other faces are in frame and press enter. Slightly tilt your face at each prompt. When training is finished, the program will automatically reload and your face should be correctly labeled.
+
+To view the location of everyone detected, navigate to https://atlasmaraudermap.herokuapp.com/map . A map should display feet for everyone detected within the last second. If you want to change the location and orientation of your camera, locally modify the file \FinalProject-Marauders_Map\opencv-face-recognition\config.json. Camera angle changes what direction your camera is facing when translating camera coordinates to display coordinates. 0 degrees points to the bottom of the map and angles progress counterclockwise. CameraX and CameraY refer to the camera's x and y coordinates on the map. (0,0) is the top left corner of the map.
+
+
+
 
