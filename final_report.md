@@ -2,7 +2,7 @@
 
 Eric Minor, Supriya Naidu, Ashwin Sankaralingam, Nelson Mitchell, Talia Krause
 
-## Project Desctiption
+## Project Description
 
    Harry Potter captured the imagination of children everywhere with its depiction of a world where magic could be used to accomplish extraordinary things. One item in particular, the Marauder's Map, allowed the user to see the location of everyone at school on a simple piece of parchement. Although the ethics of tracking people without consent are questionable, the ability to see everyone's location is an incredible boon. As long as everyone invovled has consented and is comfortable with having their location available to others, such a map would save huge quantities of time in workspaces that both encourage collaboration and allow people to move around to a variety of locations. The process of finding a knowledgeable colleague would be reduced to finding a marking on a map. Sorcerous abilities notwithstanding, the creation of such a map is possible with a synergistic usage of machine learning, conventional computer vision techniques, some trigonometry, and an aggregrative webserver.
 
@@ -36,6 +36,15 @@ The challenges in the project came from three main sources:
 * Face tracking and identification
 * Depth estimation and Absolute Position Estimation
 * Data aggregration and Display
+
+## Ethics
+From the start of our proposal we had ethical questions. The idea of tracking people within a certain area can be a bit alarming for some if they do not understand where the data is going. we intended to track the locations of people in real-time, this obviously raises some ethical questions. Some people might not want to be tracked, but as long as the device is placed in a non private area, there is no reasonable expectation of privacy. The system will be opt-in only, and will not save video or photo information, except for the training images it initially receives. If the camera identifies someone who has not previously added their face to the database, it will label them as an unknown, or leave them off the map entirely. Another ethical issue may arise with security concerns, a malicious agent that breaks into our system could theoretically steal personal information in the form of faces and names, however these pieces of data are not extremely sensitive.
+
+The technology will primarily by used as a means of easily locating people when those people have designated that they wish to be easily locatable. 
+
+In public places with many people, the technology would only be interested in the number of people in a location, not their identities, which alleviates many of the ethical concerns outlined above.
+
+
 
 
 ### Face tracking and identification 🧒🏻: 
