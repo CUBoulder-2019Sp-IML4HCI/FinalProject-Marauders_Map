@@ -42,18 +42,18 @@ The challenges in the project came from three main sources:
 
 In order to get a personalized effect for the user to use our system, we planned to identify each person seperately instead of tagging them as person `x`. This was quiet challenging to do in real time. After some digging we planned to use transfer learning over resnet layers to utilize the convolutional layer to produce the abstract representation of the face.
 
-1)  ❌Tranfer learning using resnet :  Renet [?] is one state of the art object recognition network. Using Resnet weights we tried train the last couple of fully connected layer with our trainable faces. Although it was accuracte, and capable of identifying if a person is present in the scene, it was not able to localize the presence, and it was computation intesive everytime we need to retrain a new person. It also had a very bad fps, compared to other models we tried. 
+1) ❌ Tranfer learning using resnet : Transfer learning [3] is a machine learning technique where a model trained on one task is re-purposed on a second related task. It basically tries to utilize the underlying details to solve a similar task. For example : if we had learnt about classifying a cat or a dog, the system must have learnt low level features of image classification that can be used for lion vs wolves classification. Resnet [5] is one state of the art object recognition network released by Microsoft Research,and we used that as the  base architecture for the network. Using Resnet weights trained on object detection we tried train the last two fully connected layer with our trainable faces and name labels. The system performed really well, in identifying if a person `x` is present in the scene or not. It also scaled as we increased the number of users of the system to 4. But the process of adding new users to the system was eloborate, as it would take time for training. We also had to change the number of labels in the last layer based on the number of users in the system. We highly doubted if this would scale when we added more users, and it had comparatively slow training phase. So we decided not use this process for real time person recognization.
 
-2)  ✅ Single Shot detector : OpenCV has released a new way of identifying objects and localizing those objects using transfer learning principles on facenet architecture. Facenet is one of the state-of-art facial recognition networks, capable of identifying face unaffected by pose, illumination and contrast.
+2) ✅ Single Shot detector : Single Shot Detector[4] are a specialized type of Resnet trying to find the bounding box of different objects in the picture. Resnet trained on face images, is capable of identifying all the faces in the images. Facenet [6] developed by Google, has the base architecture like the VGGNet (another neural network good for images), uses triplet loss to seperate each features of the image in a higher dimension. It results in clustering many features in higher dimension, and faces that have similar feature have smaller euclidean distance to one another. Using SSD to isolate faces and running facenet helped save not only the training time, but also the inference time.
 
-    * After loading the facenet architecture with pretrained weights, we can simply perform a single forward propogation to get a list of localized regions of interst with a probability score depicting how probable it is face. This stage is useful for localization of faces, and to detect if it is a face or not. 
+The stages of the process is as follows : 
+    * After loading the facenet architecture with pretrained weights, we can simply perform a forward propogation to get a list of localized regions of interst with a probability score depicting how probable it is face. This stage is useful for localization of faces, and to detect if it is a face or not. 
 
     * Facenet model computes a 128 dimension embedding that quantifies as an abstract representation of the face. Each person's 128 dimension would differ from another person, and it would be possible to linearly seperate these embeddings in `nth` dimension to classify each person trained by the system.
 
-    * Using SVM and linear classifier, we classify the detections based on the person's embeddings. As only the regions of interest is passed through the neural network, it is quiet fast in most of the CPU, and real time.
+    * Using SVM (linear classifier), we classify the detections based on the person's embeddings, based on the labels(names) they trained the model on.
 
-
-    * For each user, we have a trainable module, where they can enter their name and capture upto 5 pics, that will then undergo the embedding process for classification.
+    * For each user, we have a trainable module, where they can enter their name and capture upto 5 pics, that will then undergo the embedding process for classification. It follows the same process as inference with SSD followed by Facenet, but instead using inferencing from SVM, we train a new SVM each time a new person is added.
 
     //insert image after review
 
@@ -74,7 +74,7 @@ In order to get a personalized effect for the user to use our system, we planned
 
 In order to translate the depth of a face into planar coordinates for usage in real-world mappings, the angle of the face in the camera frame was calculated (based on left-right centroid location). Multipling depth by the sine of the angle yields the x coordinate of the face, and multiplying the depth by the cosine of the angle yields the y coordinate of face, relative to the camera. Each camera contains its absolute position in a map, and its pointing angle. These are used to translate face locations to absolute locations in the map. Testing shows that this estimator for distance is accurate to ~2 meters, at which point the detector beings to fail
 
-### Data aggregration and Display: 
+### Data aggregration and Display 📺: 
 ❌ Centralized Image Process: An initial idea for the project involved streaming all webcam video feeds to one machine which would contain the trained model. Although this method would slightly streamline the process, doing so would require a very powerful computer in order to process all the video data. As it stands, running the model for a single video feed used up approximately 60% of a 4th generation intel i7 processor as tested on a laptop computer. A centralized processing computer would need to handle a large number of video feeds, which would require an unfeasibly fast processor. Instead, a decentralized model where each computer analyzed its own video feed and sent face coordinates to a central server was adopted. This cut down on the amount of data the server needed to handle immensely, making it possible to use a free heroku server.
 
 ✅ Data Aggregration: The server is successfully able to collect and process face coordinates from several computers. The largest stress test we were capable of generating used five computers sending data to the server simultaneously, with each computer detecting at least one face. The server experienced no slowdown from this. When the server receives information about a face detection, it stores that face along with its last known location and the detecting camera in a dictionary If multiple cameras claim to detect the same person at multiple locations, the the server only uses data from the camera that originally detected the face. If a face is not detected from 1.5 seconds, the face is dropped from the dictionary and can be detected by another camera. The server also calculates and stores the distance traveled between locations and the direction.
@@ -136,5 +136,14 @@ We feel we learnt to develop an user end-to-end trainable computer vision system
 [1]Schroff, Florian, Dmitry Kalenichenko, and James Philbin. "Facenet: A unified embedding for face recognition and clustering." Proceedings of the IEEE conference on computer vision and pattern recognition. 2015.
 
 [2] J. C. Nascimento, A. J. Abrantes and J. S. Marques, "An algorithm for centroid-based tracking of moving objects," 1999 IEEE International Conference on Acoustics, Speech, and Signal Processing. Proceedings. ICASSP99 (Cat. No.99CH36258), Phoenix, AZ, USA, 1999, pp. 3305-3308 vol.6.
+
+[3] S. J. Pan and Q. Yang, "A Survey on Transfer Learning," in IEEE Transactions on Knowledge and Data Engineering, vol. 22, no. 10, pp. 1345-1359, Oct. 2010.
+doi: 10.1109/TKDE.2009.191
+
+[4] Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu: “SSD: Single Shot MultiBox Detector”, 2015;
+
+[5] Kaiming He, Xiangyu Zhang, Shaoqing Ren: “Deep Residual Learning for Image Recognition”, 2015; 
+
+[6] Florian Schroff, Dmitry Kalenichenko: “FaceNet: A Unified Embedding for Face Recognition and Clustering”, 2015; 
 
 [3] Tutorials from https://www.pyimagesearch.com/
