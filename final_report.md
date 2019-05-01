@@ -24,9 +24,11 @@ Eric Minor, Supriya Naidu, Ashwin Sankaralingam, Nelson Mitchell, Talia Krause
 
    Each computer running the facial tracking software displays an image of what the computer sees along with a box around each identifed face and its label. By pressing n on the keyboard when interacting with this display, a dialogue will be opened prompting the user to enter their name. The camera will then record images of the person currently in front of the camera and label those images with the entered name. The algorithm is then trained to identify the new person. A user can also press c to reset the tracking algorithm if someone is mislabeled or press q to quit the program.
    
+   ![Map Image](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/trackingImage.png)
+
    The webserver which aggregrates all tracking data also services a website, where it will output the locations of detected people. By going to the afformentioned website, a user can view live tracking data in the form of a Marauder's map. The website can also play music and has a link to the project github page for interested parties.
 
-
+![Map Image](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/ImTheMap.png)
 
 ## Challenges Faced in the project
 The challenges in the project came from three main sources:
@@ -71,8 +73,6 @@ In order to get a personalized effect for the user to use our system, we planned
 2)  ✅ Face size and angle : Using the formula Depth ∝ (Actual Face Width)/(Face Width in Frame), the relative depth of face could be estimated. Each camera has to be manually calibrated by measuring the ratio at 1 meter and dividing by a constant to make the program output equal 1 meter when the face is at 1 meter. The calibration remains accurate at all distances. 
 
 In order to translate the depth of a face into planar coordinates for usage in real-world mappings, the angle of the face in the camera frame was calculated (based on left-right centroid location). Multipling depth by the sine of the angle yields the x coordinate of the face, and multiplying the depth by the cosine of the angle yields the y coordinate of face, relative to the camera. Each camera contains its absolute position in a map, and its pointing angle. These are used to translate face locations to absolute locations in the map. Testing shows that this estimator for distance is accurate to ~2 meters, at which point the detector beings to fail
-
-Data Aggregration and Display
 
 ### Data aggregration and Display: 
 ❌ Centralized Image Process: An initial idea for the project involved streaming all webcam video feeds to one machine which would contain the trained model. Although this method would slightly streamline the process, doing so would require a very powerful computer in order to process all the video data. As it stands, running the model for a single video feed used up approximately 60% of a 4th generation intel i7 processor as tested on a laptop computer. A centralized processing computer would need to handle a large number of video feeds, which would require an unfeasibly fast processor. Instead, a decentralized model where each computer analyzed its own video feed and sent face coordinates to a central server was adopted. This cut down on the amount of data the server needed to handle immensely, making it possible to use a free heroku server.
