@@ -59,14 +59,14 @@ All notable changes to this project will be documented in this file.
 
 ## [4.0.0] - 2019-04-25
 - Adding thresholds for distances and feet angle calculation[@eric](https://github.com/em370)
-- Redoing the website with the map representing the expo room along with real-time scaling[@supriya](https://github.com/supriyanaidu)
+- Redid the website to visualize multi-camera data in a single map representing the expo room along with real-time scaling[@supriya](https://github.com/supriyanaidu)
 - Directions to train a new face on the frame. [@talia](https://github.com/takr3985)
 - Optimization and increasing the confidence in the classification of the person [@ashwin](https://github.com/ashwinroot)
 - Poster : all
 - Video : [@nelson](https://github.com/nelsonnn) 
 
 ## [5.0.0] - 2019-05-02
-- Redoing the map for class [@supriya](https://github.com/supriyanaidu),[@eric](https://github.com/em370)
+- Redoing the map for class demo(BTU Lab)[@supriya](https://github.com/supriyanaidu),[@eric](https://github.com/em370)
 - Report : all
 
 
