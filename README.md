@@ -13,7 +13,7 @@ This is part of final project for CSCI/ATLS 4889/5880 Machine Learning for Human
 
 ## Final_report : [link](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/final_report.md)
 
-## Poster : [link]()
+## Poster : [link](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/Poster.pdf)
 
 ## Final Release
 - Youtube : [youtube]()  
