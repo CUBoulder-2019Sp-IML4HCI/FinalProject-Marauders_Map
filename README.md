@@ -1,4 +1,6 @@
-# FinalProject-Marauders_Map
+# Marauders_Map : Facial Recognition and Data Aggregation for Multi-Camera Person Tracking
+
+This is part of final project for CSCI/ATLS 4889/5880 Machine Learning for Human-Computer Interaction, advised by Ben Shapiro. 
 
 ## Team
 * Talia Krause:[@takr3985](https://github.com/takr3985)
@@ -7,29 +9,20 @@
 * Supriya Naidu:[@supriyanaidu](http://github.com/supriyanaidu)
 * Ashwin Sankaralingam:[@ashwinroot](https://github.com/ashwinroot)
 
-## Proposal Doc
-* https://docs.google.com/document/d/19EeRxV9COkoVDNrlFFKW70RFBYf5CdJIvWsstcOccXc/edit
+## Proposal : [link](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/proposal.md)
 
-## Prototype(release v0.0.1):
-- Face recognition, face boundary detection and relative depth sensing 
-- Face Recognition via WebCam:
-![Face Recognition via WebCam](prototype/results.png)
-- Depth sensor via Kinect:
-![Depth sensor via Kinect](prototype/depth_kinect.jpeg)
-- Initial animation for webapp:         
-![Initial animation for webapp](prototype/feet.gif)
-- Youtube Demos:
-  * [Demo](https://youtu.be/TrNAKGQKF4Q)
-  * [How to Run](https://youtu.be/pv_LqElPHjc)
-  
-  
-  ## Final Release
-  
-  Website: https://atlasmaraudermap.herokuapp.com/map
+## Final_report : [link](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/final_report.md)
 
+## Poster : [link]()
+
+## Final Release
+- Youtube : [youtube]()  
+- Website : https://atlasmaraudermap.herokuapp.com/map
 
 
 ## Usage
+This projects uses python3.6.
+
 For installing the requirements needed in the project install the requirements.txt using :
 
 ```
