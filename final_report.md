@@ -53,7 +53,7 @@ In order to get a personalized effect for the user to use our system, we planned
 
 2) ✅ Single Shot detector: Single Shot Detector[4] is a specialized type of Resnet trying to find the bounding box of different objects in a picture. Resnet trained on face images, is capable of identifying all the faces in an image. Facenet [6] developed by Google, has the base architecture like the VGGNet (another neural network good for images), uses triplet loss to separate each features of the image in a higher dimension. It results in clustering many features in higher dimension and faces that have similar features typically have a smaller euclidean distance. Using SSD to isolate faces and running facenet helped save not only the training time, but also the inference time. The stages of the process is as follows: 
 
-    * After loading the facenet architecture with pretrained weights, we can simply perform a forward propagation to get a list of localized regions of interest with a probability score depicting how probable it is face(need to modify!!!!!). This stage is useful for localization of faces, and to detect if it is a face or not. 
+    * After loading the facenet architecture with pretrained weights, we can simply perform a forward propagation to get a list of localized regions of interest with a probability score depicting how probable it is a face. This stage is useful for localization of faces, and to detect if it is a face or not. 
 
     * Facenet model computes a 128-dimension embedding that quantifies as an abstract representation of the face. Each person's 128 dimension would differ from another person, and it would be possible to linearly separate these embeddings in the `nth` dimension to classify each person trained by the system.
 
@@ -63,7 +63,7 @@ In order to get a personalized effect for the user to use our system, we planned
 
 ![Face](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/report_pics/Screen%20Shot%202019-05-01%20at%206.42.41%20PM.png)
 
-3) ✅ Centroid Tracking: Due to the use of SVM for classification, the classification was jittery as the faces that lie closer to the margin were often confused. In order to increase the confidence in the classification, a polling method was introduced to ID a particular face after a majority??. In 40 consecutive frames, if a face has a majority name, then that face gets that name for the next 400 frames. Once again on the 400th frame, we flush the registered faces, as we wanted to the classification system to be active and correct itself if it got the face wrong the first time.
+3) ✅ Centroid Tracking: Due to the use of SVM for classification, the classification was jittery as the faces that lie closer to the margin were often confused. In order to increase the confidence in the classification, a polling method was introduced to ID a particular face after a majority has been determined. In 40 consecutive frames, if a face has a majority name, then that face gets that name for the next 400 frames. Once again on the 400th frame, we flush the registered faces, as we wanted to the classification system to be active and correct itself if it got the face wrong the first time.
 
     * Centroid Tracking uses a simple method of comparing euclidean distances between various centroid of object on the scene. It is an effective algorithm, to track multiple moving objects in the scene without losing track.
 
