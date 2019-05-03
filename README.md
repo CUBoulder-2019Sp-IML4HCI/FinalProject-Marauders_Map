@@ -16,7 +16,7 @@ This is part of final project for CSCI/ATLS 4889/5880 Machine Learning for Human
 ## Poster : [link](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/Poster.pdf)
 
 ## Final Release
-- Youtube : [youtube]()  
+- Youtube : [youtube](https://www.youtube.com/watch?v=48VhNj5HAHc&feature=youtu.be)  
 - Website : https://atlasmaraudermap.herokuapp.com/map
 
 
