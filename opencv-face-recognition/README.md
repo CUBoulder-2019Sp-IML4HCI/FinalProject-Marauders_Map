@@ -5,8 +5,3 @@
 python just_run.py
 ```
 _note : `python just_run.py -t -e` to train and regenerate the embeddings_
-
-2) To run the listner:
-```
-python listener.py
-```
