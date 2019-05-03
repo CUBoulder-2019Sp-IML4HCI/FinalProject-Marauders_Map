@@ -2,6 +2,8 @@
 
 Eric Minor, Supriya Naidu, Ashwin Sankaralingam, Nelson Mitchell, Talia Krause
 
+Video: https://www.youtube.com/watch?v=48VhNj5HAHc&feature=youtu.be
+
 ## Project Description
 
    Harry Potter captured the imagination of children everywhere with its depiction of a world where magic could be used to accomplish extraordinary things. One item in particular, the Marauder's Map, allowed the user to see the location of everyone at school on a simple piece of parchment. Although the ethics of tracking people without consent are questionable, the ability to see everyone's location is an incredible boon. As long as everyone involved has consented and is comfortable with having their location available to others, such a map would save huge quantities of time in workspaces that both encourage collaboration and allow people to move around to a variety of locations. The process of finding a knowledgeable colleague would be reduced to finding a marking on a map. Sorcerous abilities notwithstanding, the creation of such a map is possible with a synergistic usage of machine learning, conventional computer vision techniques, some trigonometry, and an aggregative webserver.
