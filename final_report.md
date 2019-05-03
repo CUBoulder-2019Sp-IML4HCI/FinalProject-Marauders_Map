@@ -107,7 +107,8 @@ In order to translate the depth of a face into planar coordinates for usage in r
    * p5 (sound and map drawing)
    * websocket (for communication with server)
    
-   
+## Data pipeline in the project : 
+![centroid](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-Marauders_Map/blob/master/report_pics/Screen%20Shot%202019-05-02%20at%209.09.58%20PM.png)
    
 ## Risk faced and mitigated
 
