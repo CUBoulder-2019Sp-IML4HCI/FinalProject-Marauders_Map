@@ -49,7 +49,7 @@ In public places with many people, the technology would only be interested in th
 
 In order to get a personalized effect for the user to use our system, we planned to identify each person separately instead of tagging them as person `x`. This was quite challenging to do in real time. After some digging, we planned to use transfer learning over resnet layers to utilize the convolutional layer to produce the abstract representation of the face.
 
-1) ❌ Transfer learning using Resnet : Transfer learning [3] is a machine learning technique where a model trained on one task is re-purposed on a second related task. It basically tries to utilize the underlying details to solve a similar task. For example: if a system learns to classify between a cat and a dog, it must have learnt low level features of image classification which can then be used to cassify between a lion and a wolf. We used Resnet [5], a state of the art object recognition network released by Microsoft Research, as the base architecture for the network. Using Resnet weights trained on object detection we train the last two fully connected layers with our trainable faces and name labels. The system performed well, in identifying if a person `x` is present in the scene or not. It also scaled as we increased the number of users of the system to 4. But the process of adding new users to the system was elaborate, as it would take time for training. We also had to change the number of labels in the last layer based on the number of users in the system. We highly doubted if this would scale when we added more users, and it had comparatively slow training phase. So we decided not use this process for real time person recognition.
+1) ❌ Transfer learning using Resnet : Transfer learning [3] is a machine learning technique where a model trained on one task is re-purposed on a second related task. It basically tries to utilize the underlying details to solve a similar task. For example: if a system learns to classify between a cat and a dog, it must have learnt low level features of image classification which can then be used to classify between a lion and a wolf. We used Resnet [5], a state of the art object recognition network released by Microsoft Research, as the base architecture for the network. Using Resnet weights trained on object detection we train the last two fully connected layers with our trainable faces and name labels. The system performed well, in identifying if a person `x` is present in the scene or not. It also scaled as we increased the number of users of the system to 4. But the process of adding new users to the system was elaborate, as it would take time for training. We also had to change the number of labels in the last layer based on the number of users in the system. We highly doubted if this would scale when we added more users, and it had comparatively slow training phase. So we decided not use this process for real time person recognition.
 
 2) ✅ Single Shot detector: Single Shot Detector[4] is a specialized type of Resnet trying to find the bounding box of different objects in a picture. Resnet trained on face images, is capable of identifying all the faces in an image. Facenet [6] developed by Google, has the base architecture like the VGGNet (another neural network good for images), uses triplet loss to separate each features of the image in a higher dimension. It results in clustering many features in higher dimension and faces that have similar features typically have a smaller euclidean distance. Using SSD to isolate faces and running facenet helped save not only the training time, but also the inference time. The stages of the process is as follows: 
 
@@ -141,6 +141,17 @@ We feel we learned to develop an user end-to-end trainable computer vision syste
 * Using a node server to aggregate data from multiple cameras
 
 * Using a website to display detections from multiple cameras
+
+
+## What We Learned
+*Kinect has issues with depth. It can tell if objects are in the same plane, but is very bad at determining exact distances. Webcam tracking is a highly developed field and is much easier to work with.
+
+*The high overhead of running ML models can be reduced by using conventional centroid tracking and only occassionally rerunning the model for new faces.
+
+*OSC is not a protocol designed for internet communication. Websocket is a much more widely used and more robust standard.
+
+*Distributing the video processing workload over multiple machines works far better than trying to obtain a centralized machine powerful enough to process all data.
+
 
 
 
