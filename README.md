@@ -32,7 +32,7 @@ pip install -r requirements.txt
 In order to use the facial tracking, you need run the recognizer locally. Navigate to the folder `FinalProject-Marauders_Map/opencv-face-recognition` and run the command 
 
 ```
-python just_run.py
+python3 just_run.py
 ```
 
 - If you need to retrain a new model with a new set of embeddings add option -e
