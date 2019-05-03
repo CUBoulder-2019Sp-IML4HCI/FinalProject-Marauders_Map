@@ -53,7 +53,7 @@ In order to get a personalized effect for the user to use our system, we planned
 
 2) ✅ Single Shot detector: Single Shot Detector[4] is a specialized type of Resnet trying to find the bounding box of different objects in a picture. Resnet trained on face images, is capable of identifying all the faces in an image. Facenet [6] developed by Google, has the base architecture like the VGGNet (another neural network good for images), uses triplet loss to separate each features of the image in a higher dimension. It results in clustering many features in higher dimension and faces that have similar features typically have a smaller euclidean distance. Using SSD to isolate faces and running facenet helped save not only the training time, but also the inference time. The stages of the process is as follows: 
 
-    * After loading the facenet architecture with pretrained weights, we can simply perform a forward propagation to get a list of localized regions of interest with a probability score depicting how probable it is a face. This stage is useful for localization of faces, and to detect if it is a face or not. 
+    * After loading the facenet architecture with pretrained weights, performing a forward propogation results in identifying the faces present in the image. The result is in a python list, with a list of regions representing the faces along with a probability score of how probable it is a face.
 
     * Facenet model computes a 128-dimension embedding that quantifies as an abstract representation of the face. Each person's 128 dimension would differ from another person, and it would be possible to linearly separate these embeddings in the `nth` dimension to classify each person trained by the system.
 
